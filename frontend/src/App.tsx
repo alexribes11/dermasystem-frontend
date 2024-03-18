@@ -1,8 +1,10 @@
+import HomePage from "./pages/Home/HomePage"
+
 function App() {
 
   return (
     <>
-        <h1>DermaSystem</h1>
+        <HomePage />
     </>
   )
 }

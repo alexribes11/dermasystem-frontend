@@ -1,0 +1,36 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero {
+  display: flex;
+}
+
+.logo {
+  width: 50px;
+  aspect-ratio: 1;
+  margin-left: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 32px;
+  display: block;
+  margin: auto;
+  font-weight: bold;
+  font-size: 15px;
+  width: 33%;
+  height: 35px;
+}
+
+.login-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.register-btn {
+  margin-top: 16px;
+}
