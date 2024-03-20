@@ -3,15 +3,22 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
 .hero {
   display: flex;
+  align-items: center;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .logo {
   width: 50px;
-  aspect-ratio: 1;
+  height: 50px;
   margin-left: 10px;
 }
 
@@ -33,4 +40,5 @@
 
 .register-btn {
   margin-top: 16px;
+  background-color: var(--gray);
 }

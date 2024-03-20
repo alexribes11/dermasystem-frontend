@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 :root {
     --primary-color: #0c91ce;
+    --gray: rgb(190, 190, 190);
 }
 
 * {
   font-family: 'Source Sans 3', sans-serif;
+  margin: 0;
 }
