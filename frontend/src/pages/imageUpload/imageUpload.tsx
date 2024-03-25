@@ -1,3 +1,4 @@
+import React from "react";
 import styles from "./imageUpload.module.css";
 
 //dermasystem logo, image upload icon, browse
@@ -7,7 +8,7 @@ import styles from "./imageUpload.module.css";
 //     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/283a2be89a7ef6ceaf0f927b79efeeb95c76ef2f98d038b5afc3c897abd7fd70?apiKey=99043b1e8e4246e2a4338db720628ce9&", alt: "Social icon 3" },
 //   ];
 
-function imageUpload() {
+function ImageUpload(): React.ReactNode {
     return <>
         <section>
             <header>
@@ -16,9 +17,9 @@ function imageUpload() {
                 <p className={styles["headersubtitle"]}>Insert image</p>
                 <p className={styles["headersubtitle"]}>Archives</p>
                 <p className={styles["headersubtitle"]}>FAQ</p>
-                <img> src="/helpIcon.png"</img>
-                <img> src="/notifIcon.png"</img>
-                <img> src="/userIcon.png"</img>
+                <img src="/helpIcon.png" />
+                <img src="/notifIcon.png" />
+                <img src="/userIcon.png"/>
             </header>
             <h2> Image Upload </h2>
              {/* image upload*/}
@@ -28,4 +29,4 @@ function imageUpload() {
     </>
 }
 
-export default imageUpload;
+export default ImageUpload;

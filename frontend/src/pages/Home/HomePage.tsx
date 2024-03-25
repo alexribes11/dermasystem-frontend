@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import styles from './home.module.css';
 
@@ -10,8 +11,8 @@ function HomePage() {
                 <img className={styles.logo} src="/logo.png" />
             </div>
             <p className={styles['subtitle']}>Revolutionizing dermoscopy with precision</p>
-            <button className={`${styles["login-btn"]} ${styles["btn"]}`}>LOGIN</button>
-            <button className={`${styles["register-btn"]} ${styles["btn"]}`}>REGISTER</button>
+            <Link to={"/login"}><button className={`${styles["login-btn"]} ${styles["btn"]}`}>LOGIN</button></Link>
+            <Link to={"/register"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>REGISTER</button></Link>
         </div>
     </div>
 }
