@@ -1,0 +1,48 @@
+.page {
+  background-color: var(--primary-color-light);
+  display: flex;
+  padding: 1rem;
+}
+
+.filter-input {
+  width: fit-content;
+  border-radius: 16px;
+  border: 0.5px solid black;
+  padding: 0.75;
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filter > h3 {
+  margin-top: 0.5rem;
+}
+
+.archives {
+  border-left: 1px solid black;
+  margin-left: 1rem;
+  padding-left: 1rem;
+}
+
+.archives > input {
+  border-radius: 1rem;
+  border: 1px solid black;
+}
+
+.archives > div {
+  display: flex;
+  flex-direction: column;
+  display: inline-block;
+  margin: 1rem;
+  text-align: center;
+}
+
+.select-btn {
+  background-color: var(--primary-color);
+  border: none;
+  color: white;
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0;
+  text-transform: uppercase;
+  font-size: 1rem;
+}

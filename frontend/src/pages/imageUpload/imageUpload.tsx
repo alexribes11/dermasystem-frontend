@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./imageUpload.module.css";
+import { Link } from "react-router-dom";
 
 //dermasystem logo, image upload icon, browse
 // const socialIcons = [
@@ -24,7 +25,7 @@ function ImageUpload(): React.ReactNode {
             <h2> Image Upload </h2>
              {/* image upload*/}
             <p className={styles["subtitle"]}> or </p>
-            <button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button>
+            <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
         </section>
     </>
 }

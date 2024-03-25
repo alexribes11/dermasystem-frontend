@@ -9,11 +9,12 @@ import HomePage from './pages/Home/HomePage.tsx';
 import ImageUpload from './pages/imageUpload/imageUpload.tsx';
 import LoginPage from './pages/Auth/Login.tsx';
 import RegisterPage from './pages/Auth/Register.tsx';
+import ArchivesPage from './pages/Archives/Archives.tsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <HomePage />
   },
   {
     path: "/image-upload",
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />
+  },
+  {
+    path: "/archives",
+    element: <ArchivesPage />
   }
 ]);
 
