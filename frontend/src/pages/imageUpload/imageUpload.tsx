@@ -15,13 +15,15 @@ function ImageUpload(): React.ReactNode {
             <header>
                 <h3>Dermasystem</h3>
                 <img className={styles.logo} src="/logo.png"></img>
-                <p className={styles["headersubtitle"]}>Insert image</p>
-                <p className={styles["headersubtitle"]}>Archives</p>
-                <p className={styles["headersubtitle"]}>FAQ</p>
-                <img src="/helpIcon.png" />
-                <img src="/notifIcon.png" />
-                <img src="/userIcon.png"/>
-            </header>
+                <nav className="nav-links">
+                    <div className="nav-link nav-link active"> insert image</div>
+                    <div className="nav-link"> archives</div>
+                    <div className="nav-link"> FAQ</div>
+                </nav>
+                    <img src="/helpIcon.png" />
+                    <img src="/notifIcon.png" />
+                    <img src="/userIcon.png"/>
+                </header>
             <h2> Image Upload </h2>
              {/* image upload*/}
             <p className={styles["subtitle"]}> or </p>
