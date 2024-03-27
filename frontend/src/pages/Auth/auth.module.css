@@ -1,7 +1,11 @@
+.page {
+}
+
 .header {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   width: fit-content;
+  margin: auto;
 }
 
 .logo {
@@ -12,6 +16,14 @@
   width: 100px;
 }
 
+.page > form {
+  width: 50%;
+  margin: auto;
+}
+
+.page > form > input {
+  width: 100%;
+}
 .header > h1 {
   color: var(--primary-color);
   font-size: 3rem;
@@ -23,4 +35,29 @@
   font-size: 1.25rem;
   align-self: flex-start;
   margin-left: -0.5rem;
+}
+
+.input-heading {
+  margin-top: 1rem;
+}
+
+.login-btn {
+  text-transform: capitalize;
+  font-weight: bold;
+  display: block;
+  border-radius: 1rem;
+  border: none;
+  background-color: var(--primary-color);
+  width: 100%;
+  color: white;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.register-link {
+  text-align: center;
+  text-decoration: underline;
+  color: rgb(112, 112, 112);
+  width: 100%;
 }

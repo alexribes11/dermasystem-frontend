@@ -1,16 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from './auth.module.css';
 import { login } from "./axios";
 import { useState } from "react";
 
 export default function LoginPage() {
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const sendLogin = async () => {
     try {
       setLoading(true);
-      await login({username: 'janedoe1', password: 'janedoe'});
+      const data = await login({username: 'janedoe1', password: 'janedoe'});
+      console.log(data);
       setLoading(false);
+      navigate("/image-upload", {state: data});
     } catch(e) {
       console.error(e);
     }
@@ -27,12 +29,12 @@ export default function LoginPage() {
     </div>
 
     <form>
-      <h3>Username</h3>
+      <h3 className={styles['input-heading']}>Username</h3>
       <input type="text" />
-      <h3>Password</h3>
+      <h3 className={styles['input-heading']}>Password</h3>
       <input type="password"/>
-      <button type="submit" onClick={sendLogin}>Login</button>
+      <button className={styles['login-btn']} type="submit" onClick={sendLogin}>LOGIN</button>
+      <Link to={"/register"} className={styles['register-link']}>Don't have an account?</Link>
     </form>
-    <Link to={"/register"}>Don't have an account?</Link>
   </div>
 }
