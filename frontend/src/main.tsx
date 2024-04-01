@@ -5,11 +5,13 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
 import HomePage from './pages/Home/HomePage.tsx';
 import ImageUpload from './pages/imageUpload/imageUpload.tsx';
 import LoginPage from './pages/Auth/Login.tsx';
 import RegisterPage from './pages/Auth/Register.tsx';
 import ArchivesPage from './pages/Archives/Archives.tsx';
+import ProfilePage from './pages/Profiles/profiles.tsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/archives",
     element: <ArchivesPage />
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />
   }
 ]);
 
