@@ -12,21 +12,11 @@ import { Link } from "react-router-dom";
 function ImageUpload(): React.ReactNode {
     return <>
         <section>
-            <header>
-                <h3>Dermasystem</h3>
-                <img className={styles.logo} src="/logo.png"></img>
-                <nav className="nav-links">
-                    <div className="nav-link nav-link active"> insert image</div>
-                    <div className="nav-link"> archives</div>
-                    <div className="nav-link"> FAQ</div>
-                </nav>
-                    <img src="/helpIcon.png" />
-                    <img src="/notifIcon.png" />
-                    <img src="/userIcon.png"/>
-                </header>
-            <h2> Image Upload </h2>
-             {/* image upload*/}
-            <p className={styles["subtitle"]}> or </p>
+            <div style={{textAlign:"center"}}>
+                <h2> Image Upload </h2>
+                {/* image upload */}
+                <p className={styles["subtitle"]}> or </p>
+            </div>
             <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
         </section>
     </>
