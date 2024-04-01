@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "./imageUpload.module.css";
 import { Link } from "react-router-dom";
 
@@ -10,12 +10,51 @@ import { Link } from "react-router-dom";
 //   ];
 
 function ImageUpload(): React.ReactNode {
+    const PORT_NUMBER = 5005;
+    const [image, setImage] = useState('')
+
+    function handleImageChange(e) {
+        console.log(e.target.files);
+        setImage(e.target.files[0])
+    }
+
+    function handleUploadImageToProcess() {
+        const formData = new FormData();
+        formData.append("file", image);
+        
+        // https://stackoverflow.com/questions/49692745/express-using-multer-error-multipart-boundary-not-found-request-sent-by-pos
+        // Says to get rid of headers, so that the fetch will automatically
+        // set the correct headers for you.
+        console.log("RUN handleUploadImageToProcess, Before call fetch.");
+        fetch("http://localhost:" + PORT_NUMBER + "/process-image", {
+            method: 'POST',
+            body: formData
+        }).then((res) => console.log(res))
+        .catch((err) => ("Error occured", err));
+
+    }
+
+    /*
+    const form = document.getElementById("form");  
+    form?.addEventListener("submit", handleUploadImageToProcess);
+    <form id="form">
+            <label>Test field:  <input type="file" name="uploadImageButton"></input></label>
+            <br /><br />
+            <input type="submit" value="Click to Upload Image" />
+            </form>
+    */
+
     return <>
         <section>
             <div style={{textAlign:"center"}}>
                 <h2> Image Upload </h2>
                 {/* image upload */}
-                <p className={styles["subtitle"]}> or </p>
+    
+             <input type="file" name="file" onChange={handleImageChange}></input>
+             <button onClick={() => handleUploadImageToProcess()}>Submit</button>
+            
+
+            <p className={styles["subtitle"]}> or </p>
             </div>
             <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
         </section>
