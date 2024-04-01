@@ -30,7 +30,7 @@ function ImageUpload(): React.ReactNode {
             method: 'POST',
             body: formData
         }).then((res) => console.log(res))
-        .catch((err) => ("Error occured", err));
+        .catch((err) => console.log("Error occured", err));
 
     }
 

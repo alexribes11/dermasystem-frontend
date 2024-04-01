@@ -20,10 +20,6 @@ const router = createBrowserRouter([
     element: <Navbar />,
     children: [
       {
-        index: true,
-        element: <HomePage />
-      },
-      {
         path: "/image-upload",
         element: <ImageUpload />
       },
@@ -44,6 +40,10 @@ const router = createBrowserRouter([
   {
     path:  "/",
     children: [
+      {
+        index: true,
+        element: <HomePage />
+      },
       {
         path: "/login",
         element: <LoginPage />
