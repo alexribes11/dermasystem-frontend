@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Navbar from '../../components/Navbar';
 import styles from './home.module.css';
 import { useEffect } from 'react';
 import socket from '../../utils/socket';
@@ -23,11 +22,10 @@ function HomePage() {
     });
     
     return <div className={styles['home-page']}>
-        <div>
-            <Navbar />
+        <div className={styles['section']}>
             <div className={styles['hero']}>
-                <h1>DermaSystem</h1>
                 <img className={styles.logo} src="/logo.png" />
+                <h1>DermaSystem</h1>
             </div>
             <p className={styles['subtitle']}>Revolutionizing dermoscopy with precision</p>
             <Link to={"/login"}><button className={`${styles["login-btn"]} ${styles["btn"]}`}>LOGIN</button></Link>
