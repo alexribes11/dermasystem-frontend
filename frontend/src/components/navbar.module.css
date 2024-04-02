@@ -1,0 +1,65 @@
+.page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+.page > div {
+  flex-grow: 1;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.navbar > div {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo > img {
+  width: 2.5rem;
+  margin-right: 0.5rem;
+}
+
+.logo > h1 {
+  color: black;
+  font-size: 1.5rem;
+}
+
+.links {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.links > * {
+  text-decoration: none;
+  color: rgb(86, 86, 86);
+}
+
+.links > *:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+.icons {
+  padding: 0.25rem;
+}
+
+.icons > * {
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.user-icon {
+  display: flex;
+}
