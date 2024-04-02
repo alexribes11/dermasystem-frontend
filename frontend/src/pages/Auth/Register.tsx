@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import styles from './auth.module.css';
 import RegisterRequestBody from "./types/RegisterRequestResponse";
 import { ChangeEventHandler, useState } from "react";
 import { register } from "./axios";
@@ -30,14 +31,14 @@ export default function RegisterPage() {
     }
   }
   
-  return <div>
+  return <div className={styles['page']}>
     <h1>Register</h1>
     <p>Join us</p>
 
     <form onSubmit={e => e.preventDefault()}>
       <h1>Personal Details</h1>
 
-      <h3>First Name</h3>
+      <h3 className={styles['input-heading']}>First Name</h3>
       <input
         type="text" 
         value={registerData.firstName}
@@ -45,7 +46,7 @@ export default function RegisterPage() {
         onChange={changeRegisterData}
       />
 
-      <h3>Last Name</h3>
+      <h3 className={styles['input-heading']}>Last Name</h3>
       <input
         type="text" 
         value={registerData.lastName}
@@ -53,7 +54,7 @@ export default function RegisterPage() {
         onChange={changeRegisterData}
       />
 
-      <h3>Last Name</h3>
+      <h3 className={styles['input-heading']}>Email</h3>
       <input
         type="email" 
         value={registerData.email}
@@ -61,7 +62,7 @@ export default function RegisterPage() {
         onChange={changeRegisterData}
       />
       
-      <h3>I am a:</h3>
+      <h3 className={styles['input-heading']}>I am a:</h3>
       <select
         name="role"
         value={registerData.role}
@@ -74,7 +75,7 @@ export default function RegisterPage() {
       </select>
 
       <h1>Login Details</h1>
-      <h3>Username</h3>
+      <h3 className={styles['input-heading']}>Username</h3>
       <input
         type="text" 
         value={registerData.username}
@@ -82,7 +83,7 @@ export default function RegisterPage() {
         onChange={changeRegisterData}
       />
 
-      <h3>Password</h3>
+      <h3 className={styles['input-heading']}>Password</h3>
       <input
         type="password" 
         value={registerData.password}
@@ -90,7 +91,7 @@ export default function RegisterPage() {
         onChange={changeRegisterData}
       />
 
-      <button onClick={sendRegister}>Register</button>
+      <button className={styles['login-btn']} onClick={sendRegister}>Register</button>
     </form>
     <Link to="/login">Already have an account?</Link>
   </div>
