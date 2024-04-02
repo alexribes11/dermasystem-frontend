@@ -2,7 +2,7 @@ import axios from 'axios';
 import LoginRequestBody from './types/LoginRequestBody';
 import RegisterRequestBody from './types/RegisterRequestResponse';
 
-const PORT_NUMBER = 5005;
+// const PORT_NUMBER = 5005;
 
 const AuthAxios = axios.create({
   baseURL: "http://localhost:5005/api/v0/auth"
@@ -27,6 +27,6 @@ export const login = async (body: LoginRequestBody) => {
           //const data = response.data;
           //return data;
         })
-        .catch((err) => ("Error occured", err));
+        .catch((err) => console.error("Error occured", err));
 
 }

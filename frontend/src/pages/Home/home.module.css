@@ -6,6 +6,10 @@
   height: 100vh;
 }
 
+/* Removes the underline underneath the login/register buttons */
+.section * {
+  text-decoration: none;
+}
 
 .hero {
   display: flex;
@@ -34,6 +38,10 @@
   width: 33%;
   height: 35px;
   text-decoration: none;
+}
+
+.btn:hover {
+  cursor: pointer;
 }
 
 .login-btn {

@@ -21,11 +21,14 @@ export default function LoginPage() {
   if (loading) {
     return <div>Loading...</div>
   }
+
   return <div className={styles['page']}>
     <div className={styles.header}>
       <img src="/logo.png" className={styles.logo}/>
-      <h1>Login</h1>
-      <p>Welcome back</p>
+      <div className={styles['header--text']}>
+        <h1>Login</h1>
+        <p>Welcome back</p>
+      </div>
     </div>
 
     <form>

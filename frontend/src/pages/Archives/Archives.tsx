@@ -10,7 +10,6 @@ export default function ArchivesPage() {
   createImages(8);
 
   return <div>
-    <h1>Archives</h1>
       <div className={styles.page}>
         <div className={styles.filter}>
           <h1>Filter</h1>
