@@ -138,7 +138,6 @@ function ImageUpload(): React.ReactNode {
              <img src={pathToProcessedImage} alt="Either a image has not been uploaded or has not been processed"/>
 
             <p className={styles["subtitle"]}> or </p>
-            </div>
             <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
         </section>
     </>
