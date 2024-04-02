@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styles from "./imageUpload.module.css";
 import { Link } from "react-router-dom";
 
@@ -10,8 +10,14 @@ import { Link } from "react-router-dom";
 //   ];
 
 function ImageUpload(): React.ReactNode {
+    console.log("TYPEOF = ", typeof(styles.imageUploadFormContainer));
+    const STANDARD_IMAGE_WIDTH = "200";
+    const STANDARD_IMAGE_HEIGHT = "200";
+
     const PORT_NUMBER = 5005;
-    const [image, setImage] = useState('');
+    const [selectedFile, setSelectedFile] = useState()
+    const [preview, setPreview] = useState();
+
     const [pathToProcessedImage, setPathToProcessedImage] = useState('');
 
     const dropArea = document.getElementById("drop-area")
@@ -63,18 +69,28 @@ function ImageUpload(): React.ReactNode {
         dropArea.classList.remove('active')
     }
 
-    function handleImageChange(e: Event) {
+    function handleSelectedFileChange(e: Event) {
+        const eTarget = (e.target as HTMLInputElement);
+        if (!eTarget.files || eTarget.files.length === 0) {
+            setSelectedFile(undefined)
+            return
+        }
+
+        // I've kept this example simple by using the first image instead of multiple
+        setSelectedFile(eTarget.files[0])
+        /*
         const eTarget = (e?.target as HTMLInputElement);
         console.log(eTarget.files);
         if (eTarget.files == null) {
             return;
         }
-        setImage(eTarget.files[0])
+        setSelectedFile(eTarget.files[0])
+        */
     }
 
     function handleUploadImageToProcess() {
         const formData = new FormData();
-        formData.append("file", image);
+        formData.append("file", selectedFile);
         
         // https://stackoverflow.com/questions/49692745/express-using-multer-error-multipart-boundary-not-found-request-sent-by-pos
         // Says to get rid of headers, so that the fetch will automatically
@@ -100,6 +116,19 @@ function ImageUpload(): React.ReactNode {
         .catch((err) => (err));
 
     }
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreview(undefined);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile)
+        setPreview(objectUrl);
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [selectedFile])
 
     /*
     const form = document.getElementById("form");  
@@ -127,18 +156,43 @@ function ImageUpload(): React.ReactNode {
                     <img src="/notifIcon.png" />
                     <img src="/userIcon.png"/>
                 </header>
-            <h2> Image Upload </h2>
+            
              {/* image upload*/}
 
-             <div id="drop-area" className={styles.dropArea}>
-             <input type="file" name="file" onChange={handleImageChange}></input>
-             <button onClick={() => handleUploadImageToProcess()}>Submit</button>
+            <div className={styles.imageUploadFormContainer}>
+                <div className={styles.centeredRow}>
+                    <h2>Image Upload</h2>
+                </div>
+                <div className={styles.imageUploadFormContainerRow}>
+                    <div className={styles.imageUploadFormContainerCol}>
+                    <input type="file" name="file" id="uploadInputImageButton" onChange={handleSelectedFileChange} className={styles.inputFile}></input>
+                    <label htmlFor="uploadInputImageButton"> Choose file... </label>
+
+                    <p className={styles["subtitle"]}> or </p>
+            <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
+                    </div>
+                </div>
+                <div className={styles.imageUploadFormContainerRow}>
+                    <div className={styles.imageUploadContainer}>
+                    
+                    <div id="drop-area" className={styles.dropArea}>
+                    {selectedFile &&  <img src={preview} width={STANDARD_IMAGE_WIDTH} height={STANDARD_IMAGE_HEIGHT}/> }
+                    </div>
+                    </div>
+
+                    <div className={styles.imageUploadContainer}>
+                        <div className={styles.dropArea + ' ' + styles.greyBackgroundColor}>
+                        <img src={pathToProcessedImage} alt="Either a image has not been uploaded or has not been processed" width={STANDARD_IMAGE_WIDTH} height={STANDARD_IMAGE_HEIGHT}/>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.centeredRow}>
+                    <button onClick={() => handleUploadImageToProcess()}>Submit</button>
+                </div>
              </div>
 
-             <img src={pathToProcessedImage} alt="Either a image has not been uploaded or has not been processed"/>
 
-            <p className={styles["subtitle"]}> or </p>
-            <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
         </section>
     </>
 }

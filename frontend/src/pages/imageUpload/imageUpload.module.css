@@ -44,18 +44,83 @@
     color: white;
   }
   */
-  
+  .imageUploadFormContainer {
+    /* background-color: #333; */
+    background-color: #469bd9;
+    width: 800px;
+    margin: auto;
+  }
+  .imageUploadFormContainerRow {
+    display: flex;
+    flex-direction: row;
+  }
   .dropArea {
-    background-color: #f0f;
-    height: 200px;
-    border: 2px dashed #ccc;
+    background-color: rgba(232,243,255,255);
+    /* background-color: #469bd9; */
+    border: 2px #ccc;
     border-radius: 20px;
-    width: 480px;
     font-family: sans-serif;
-    margin: 100px auto;
-    padding: 20px;
+    height: 250px;
+    width: 230px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*padding: 20px;
+    */
   }
   .dropArea.highlight {
     border-color: purple;
   }
  
+  .imageUploadContainer {
+    /* background-color: #ff0; */
+    width: 50%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .imageUploadFormContainerCol {
+    /* background-color: #0ff; */
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .centeredRow {
+    display: flex;
+    justify-content: center;
+  }
+
+  .greyBackgroundColor {
+    background-color: #999;
+  }
+
+  .register-btn {
+    margin-bottom: 20px;
+  }
+
+  .inputFile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+.inputFile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+    cursor: pointer; /* "hand" cursor */
+}
+
+.inputFile:focus + label,
+.inputFile + label:hover {
+    background-color: red;
+}
