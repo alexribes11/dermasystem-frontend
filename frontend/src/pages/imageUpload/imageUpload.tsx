@@ -11,11 +11,65 @@ import { Link } from "react-router-dom";
 
 function ImageUpload(): React.ReactNode {
     const PORT_NUMBER = 5005;
-    const [image, setImage] = useState('')
+    const [image, setImage] = useState('');
+    const [pathToProcessedImage, setPathToProcessedImage] = useState('');
 
-    function handleImageChange(e) {
-        console.log(e.target.files);
-        setImage(e.target.files[0])
+    const dropArea = document.getElementById("drop-area")
+    if (dropArea != null) {
+        console.log("dropArea is not null");
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false)   
+            document.body.addEventListener(eventName, preventDefaults, false)
+        });
+
+        // Handle dropped files
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        dropArea.addEventListener('mouseover', handleMouseEnter, false);
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false)
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false)
+        });
+    }
+
+    function preventDefaults(e) {
+        console.log("RUN preventDefaults");
+        e.preventDefault()
+        e.stopPropagation()
+    }
+
+    function handleMouseEnter(e) {
+        console.log("RUN mouse enter");
+    }
+
+    function handleDrop(e) {
+        console.log("RUN handleDrop");
+        var dt = e.dataTransfer;
+        var files = dt.files;
+        console.log(typeof(files));
+        console.log("files=", files);
+        // [...files]
+    }
+
+    function highlight(e) {
+        dropArea.classList.add('highlight')
+    }
+      
+    function unhighlight(e) {
+        dropArea.classList.remove('active')
+    }
+
+    function handleImageChange(e: Event) {
+        const eTarget = (e?.target as HTMLInputElement);
+        console.log(eTarget.files);
+        if (eTarget.files == null) {
+            return;
+        }
+        setImage(eTarget.files[0])
     }
 
     function handleUploadImageToProcess() {
@@ -29,8 +83,21 @@ function ImageUpload(): React.ReactNode {
         fetch("http://localhost:" + PORT_NUMBER + "/process-image", {
             method: 'POST',
             body: formData
-        }).then((res) => console.log(res))
-        .catch((err) => ("Error occured", err));
+        }).then((res) => {
+            return res.json()
+        }).then((res) => {
+            console.log("POST process-image .then(), res=", res);
+
+            setPathToProcessedImage("http://localhost:" + PORT_NUMBER + "/static/" + res.processedFilename);
+            /*
+            fetch("http://localhost:" + PORT_NUMBER + "/static/" + res.pathToProcessedFile, {
+                method: 'GET'
+            }).then((res) => {
+                return res.json()
+            });
+            */
+        })
+        .catch((err) => (err));
 
     }
 
@@ -43,6 +110,8 @@ function ImageUpload(): React.ReactNode {
             <input type="submit" value="Click to Upload Image" />
             </form>
     */
+
+        console.log("pathToProcessedImage=", pathToProcessedImage);
 
     return <>
         <section>
@@ -61,9 +130,12 @@ function ImageUpload(): React.ReactNode {
             <h2> Image Upload </h2>
              {/* image upload*/}
 
+             <div id="drop-area" className={styles.dropArea}>
              <input type="file" name="file" onChange={handleImageChange}></input>
              <button onClick={() => handleUploadImageToProcess()}>Submit</button>
-            
+             </div>
+
+             <img src={pathToProcessedImage} alt="Either a image has not been uploaded or has not been processed"/>
 
             <p className={styles["subtitle"]}> or </p>
             <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
