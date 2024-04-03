@@ -54,8 +54,8 @@ function ImageUpload(): React.ReactNode {
 
     function handleDrop(e) {
         console.log("RUN handleDrop");
-        var dt = e.dataTransfer;
-        var files = dt.files;
+        const dt = e.dataTransfer;
+        const files = dt.files;
         console.log(typeof(files));
         console.log("files=", files);
         // [...files]

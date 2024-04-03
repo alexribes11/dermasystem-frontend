@@ -37,7 +37,8 @@ export default function LoginPage() {
       <h3 className={styles['input-heading']}>Password</h3>
       <input type="password"/>
       <button className={styles['login-btn']} type="submit" onClick={sendLogin}>LOGIN</button>
-      <Link to={"/register"} className={styles['register-link']}>Don't have an account?</Link>
     </form>
+    
+    <Link to={"/register"} className={styles['register-link']}>Don't have an account?</Link>
   </div>
 }

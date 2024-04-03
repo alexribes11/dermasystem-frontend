@@ -9,7 +9,8 @@
 .header {
   display: flex;
   width: 50%;
-  margin-bottom: 3rem;
+  max-width: 500px;
+  margin-bottom: 2rem;
 }
 
 .header--text {
@@ -18,27 +19,12 @@
 
 .page > form {
   width: 50%;
+  max-width: 500px;
 }
 
 .page > form > input {
   width: 100%;
-}
-
-/* .header > h1 {
-  color: var(--primary-color);
-  font-size: 3rem;
-  align-self: flex-end;
-  margin-left: -0.7rem;
-}
-
-.header > p {
-  font-size: 1.25rem;
-  align-self: flex-start;
-  margin-left: -0.5rem;
-} */
-
-.input-heading {
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .login-btn {
@@ -52,12 +38,13 @@
   color: white;
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  margin-bottom: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
 }
 
-.register-link {
+.register-link{
   text-align: center;
   text-decoration: underline;
   color: rgb(112, 112, 112);
-  width: 100%;
 }

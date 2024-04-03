@@ -32,7 +32,7 @@ export default function Navbar() {
   });
 
   return <div className={styles['page']}>
-    <div className="header+main">
+    <div className={styles['header-and-main']}>
       <header className={styles['navbar']}>
         <div className={styles['logo']}>
           <img src="logo.png"/>
@@ -54,7 +54,7 @@ export default function Navbar() {
           </Link>
         </div>
       </header>
-      <Outlet />
+      <Outlet/>
     </div>
     <aside>
       {showNotifications && <Notifications notifications={notifications}/>}

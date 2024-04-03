@@ -4,8 +4,10 @@
   display: flex;
 }
 
-.page > div {
+.header-and-main {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .navbar {
