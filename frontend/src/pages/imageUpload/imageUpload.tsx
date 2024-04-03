@@ -144,7 +144,7 @@ function ImageUpload(): React.ReactNode {
 
     return <>
         <section>
-            <header>
+            {/* <header>
                 <h3>Dermasystem</h3>
                 <img className={styles.logo} src="/logo.png"></img>
                 <nav className="nav-links">
@@ -155,7 +155,7 @@ function ImageUpload(): React.ReactNode {
                     <img src="/helpIcon.png" />
                     <img src="/notifIcon.png" />
                     <img src="/userIcon.png"/>
-                </header>
+                </header> */}
             
              {/* image upload*/}
 
