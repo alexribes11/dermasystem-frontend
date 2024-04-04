@@ -1,20 +1,22 @@
+import { useEffect, useState } from 'react';
 import { PatientImage } from './PatientImage';
 import styles from './archives.module.css';
 
 export default function ArchivesPage() {
-  const images: PatientImage[] = [];
 
-  function createImages(n: number) {
-    for (let i = 0; i < n; i++) {
-      images.push({
-        patientId: "id0",
-        patientName: "Patient Zero",
-        imageUrl: "./lesion-with-hair.png",
-        dateUploaded: "01/01/01"
+  const [images, setImages] = useState<PatientImage[]>([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const response = await fetch('http://localhost:5005/api/v0/images', {
+        credentials: 'include'
       });
+      const data = await response.json();
+      const { photos } = data;
+      setImages(photos);
     }
-  }
-  createImages(8);
+    fetchImages();
+  }, []);
 
   return (
       <div className={styles.page}>
@@ -33,10 +35,10 @@ export default function ArchivesPage() {
         </div>
         <div className={styles.archives}>
           {images.map((image) => {
-              return <div>
+              return <div className={styles['image-card']} key={image.imageUrl}>
                 <img src={image.imageUrl} className={styles.image}/>
-                <h4>Patient Name</h4>
-                <p>01/01/01</p>
+                <h4>{image.patientName}</h4>
+                <p>{image.dateUploaded}</p>
                 <button className={styles['select-btn']}>Select</button>
               </div>
           })}

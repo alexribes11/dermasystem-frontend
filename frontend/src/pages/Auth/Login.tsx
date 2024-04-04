@@ -9,10 +9,10 @@ export default function LoginPage() {
   const sendLogin = async () => {
     try {
       setLoading(true);
-      const data = await login({username: 'janedoe1', password: 'janedoe'});
+      const data = await login({username: 'janedoe', password: 'janedoe'});
       console.log(data);
       setLoading(false);
-      navigate("/image-upload", {state: data});
+      navigate("/image-upload", {state: data.data});
     } catch(e) {
       console.error(e);
     }

@@ -98,7 +98,8 @@ function ImageUpload(): React.ReactNode {
         console.log("RUN handleUploadImageToProcess, Before call fetch.");
         fetch("http://localhost:" + PORT_NUMBER + "/process-image", {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include'
         }).then((res) => {
             return res.json()
         }).then((res) => {
