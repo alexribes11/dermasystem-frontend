@@ -58,8 +58,8 @@ body {
     margin: auto;
   }
   .imageUploadFormContainerRow {
-    background-color: #ff0;
-    border: 3px solid black;
+    /* background-color: #ff0;
+    border: 3px solid black;*/
     display: flex;
     flex-direction: row;
     /* padding-bottom: 30px; */
@@ -108,7 +108,7 @@ body {
   }
 
   .imageUploadFormContainerCol {
-    background-color: #0ff;
+    /* background-color: #0ff; */
     width: 50%;
     height: 100%;
     display: flex;
@@ -123,11 +123,14 @@ body {
   }
 
   .centeredRow {
-    background-color: #0f0;
+    /* background-color: #0f0; */
     display: flex;
     justify-content: center;
     /* padding-bottom: 30px; */
+  }
 
+  .topMostRow {
+    padding-top: 15px;
   }
 
   .greyBackgroundColor {
@@ -194,9 +197,11 @@ div.dropArea:before {
   margin: 30px;
 }
 
+/*
 .colCenteredWithinRow {
   background-color: #faa;
 }
+*/
 
 .colOfTwoButtons {
   display: flex;

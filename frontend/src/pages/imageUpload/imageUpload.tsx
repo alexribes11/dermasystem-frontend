@@ -241,7 +241,7 @@ function ImageUpload(): React.ReactNode {
              {/* image upload*/}
 
             <div className={styles.imageUploadFormContainer}>
-                <div className={styles.centeredRow}>
+                <div className={styles.centeredRow + " " + styles.topMostRow}>
                     <h2>Image Upload</h2>
                 </div>
                 <div className={styles.imageUploadFormContainerRow}>
