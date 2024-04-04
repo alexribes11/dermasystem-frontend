@@ -1,6 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import styles from "./imageUpload.module.css";
 import { Link } from "react-router-dom";
+import { IconContext } from "react-icons";
+import { FiUpload } from "react-icons/fi";
+import {useDropzone} from 'react-dropzone'
 
 //dermasystem logo, image upload icon, browse
 // const socialIcons = [
@@ -10,16 +13,22 @@ import { Link } from "react-router-dom";
 //   ];
 
 function ImageUpload(): React.ReactNode {
+    /*
+    <p className={styles["subtitle"]}> or </p>
+    <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
+    */
     console.log("TYPEOF = ", typeof(styles.imageUploadFormContainer));
     const STANDARD_IMAGE_WIDTH = "200";
     const STANDARD_IMAGE_HEIGHT = "200";
 
     const PORT_NUMBER = 5005;
-    const [selectedFile, setSelectedFile] = useState()
-    const [preview, setPreview] = useState();
+
+    const [selectedFile, setSelectedFile] = useState();
+    const [preview, setPreview] = useState<string | ArrayBuffer | null>();
 
     const [pathToProcessedImage, setPathToProcessedImage] = useState('');
 
+    /*
     const dropArea = document.getElementById("drop-area")
     if (dropArea != null) {
         console.log("dropArea is not null");
@@ -41,6 +50,51 @@ function ImageUpload(): React.ReactNode {
             dropArea.addEventListener(eventName, unhighlight, false)
         });
     }
+    */
+
+    const setPreviewInputImageOnload = (newObjectUrl: string) => {
+        // free memory when ever this component is unmounted
+        const previewInputImgObj = document.getElementById("previewInputImg");
+        if (previewInputImgObj != null) {
+            previewInputImgObj.onload = (evt) => {
+                console.log("RUN previewInputImgObj onload !!! with objectUrl=", newObjectUrl);
+                previewInputImgObj.onload = null
+                URL.revokeObjectURL(newObjectUrl);
+                setPathToProcessedImage('');
+            }
+        }
+
+
+    }
+
+    const onDrop = useCallback((acceptedFiles: FileList) => {
+        console.log("RUN onDrop !!!");
+        // Do something with the files
+        
+        /*
+        const file = new FileReader;
+        file.onload = function() {
+            console.log("onDrop selectedFile AND preview=");
+            console.log(acceptedFiles[0], " ", typeof(acceptedFiles[0]));
+            console.log(file.result, " ", typeof(file.result));
+
+            setSelectedFile(acceptedFiles[0]);
+            setPreview(file.result);
+
+        }
+        
+        file.readAsDataURL(acceptedFiles[0]);
+        */
+
+             
+        const objectUrl = URL.createObjectURL(acceptedFiles[0]);
+
+        setSelectedFile(acceptedFiles[0]);
+        setPreview(objectUrl);
+        setPreviewInputImageOnload(objectUrl);
+      }, [])
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
 
     function preventDefaults(e) {
         console.log("RUN preventDefaults");
@@ -61,6 +115,7 @@ function ImageUpload(): React.ReactNode {
         // [...files]
     }
 
+    /*
     function highlight(e) {
         dropArea.classList.add('highlight')
     }
@@ -68,6 +123,7 @@ function ImageUpload(): React.ReactNode {
     function unhighlight(e) {
         dropArea.classList.remove('active')
     }
+    */
 
     function handleSelectedFileChange(e: Event) {
         const eTarget = (e.target as HTMLInputElement);
@@ -77,7 +133,21 @@ function ImageUpload(): React.ReactNode {
         }
 
         // I've kept this example simple by using the first image instead of multiple
-        setSelectedFile(eTarget.files[0])
+        setSelectedFile(eTarget.files[0]);
+        if (!eTarget.files[0]) {
+            setPreview(undefined);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(eTarget.files[0]);
+        console.log("IMPORTANT the objectUrl of new object=", objectUrl);
+        console.log("handleSelectedFileChange selectedFile AND preview=");
+        console.log(eTarget.files[0], " ", typeof(eTarget.files[0]));
+        console.log(objectUrl, " ", typeof(objectUrl));
+        setPreview(objectUrl);
+
+        setPreviewInputImageOnload(objectUrl);
+
         /*
         const eTarget = (e?.target as HTMLInputElement);
         console.log(eTarget.files);
@@ -117,6 +187,12 @@ function ImageUpload(): React.ReactNode {
 
     }
 
+    function handleCancelImageUpload() {
+        setPreview('');
+        setPathToProcessedImage('');
+    }
+
+    /*
     useEffect(() => {
         if (!selectedFile) {
             setPreview(undefined);
@@ -129,6 +205,7 @@ function ImageUpload(): React.ReactNode {
         // free memory when ever this component is unmounted
         return () => URL.revokeObjectURL(objectUrl)
     }, [selectedFile])
+    */
 
     /*
     const form = document.getElementById("form");  
@@ -142,6 +219,10 @@ function ImageUpload(): React.ReactNode {
 
         console.log("pathToProcessedImage=", pathToProcessedImage);
 
+    /*
+    It used to be {!selectedFile && },
+    but now it is {!preview && }.
+    */
     return <>
         <section>
             {/* <header>
@@ -168,27 +249,45 @@ function ImageUpload(): React.ReactNode {
                     <input type="file" name="file" id="uploadInputImageButton" onChange={handleSelectedFileChange} className={styles.inputFile}></input>
                     <label htmlFor="uploadInputImageButton"> Choose file... </label>
 
-                    <p className={styles["subtitle"]}> or </p>
-            <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
+
                     </div>
                 </div>
                 <div className={styles.imageUploadFormContainerRow}>
                     <div className={styles.imageUploadContainer}>
                     
-                    <div id="drop-area" className={styles.dropArea}>
-                    {selectedFile &&  <img src={preview} width={STANDARD_IMAGE_WIDTH} height={STANDARD_IMAGE_HEIGHT}/> }
+                    <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <div id="drop-area" className={styles.dropArea + " " + styles.dropInputArea}>
+                            {preview && <div className={styles.imgContainer}>
+                                <img id="previewInputImg" src={preview} width={STANDARD_IMAGE_WIDTH} height={STANDARD_IMAGE_HEIGHT}/>
+                                </div>
+                            }
+                            {!preview && <IconContext.Provider value={{ color: "#0e9cde", size: '50px' }}>
+                            <FiUpload />
+                            </IconContext.Provider>
+                            }
+                    
+                        </div>
                     </div>
+
+                    
+                   
                     </div>
 
                     <div className={styles.imageUploadContainer}>
                         <div className={styles.dropArea + ' ' + styles.greyBackgroundColor}>
-                        <img src={pathToProcessedImage} alt="Either a image has not been uploaded or has not been processed" width={STANDARD_IMAGE_WIDTH} height={STANDARD_IMAGE_HEIGHT}/>
+                            <div className={styles.imgContainer}>
+                                <img src={pathToProcessedImage} alt="Either a image has not been uploaded or has not been processed" width={STANDARD_IMAGE_WIDTH} height={STANDARD_IMAGE_HEIGHT}/>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div className={styles.centeredRow}>
-                    <button onClick={() => handleUploadImageToProcess()}>Submit</button>
+                    <div className={styles.colCenteredWithinRow + " " + styles.colOfTwoButtons}>
+                        <button className={styles.roundButton} onClick={() => handleUploadImageToProcess()}>Submit</button>
+                        <button className={styles.roundButton} onClick={() => handleCancelImageUpload()}>Cancel</button>
+                    </div>
                 </div>
              </div>
 
