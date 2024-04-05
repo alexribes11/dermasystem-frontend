@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   /* align-items: center; */
-  background-color: #faa;
+  background-color: #e8f3ff;
 }
 
 
@@ -12,7 +12,7 @@
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   */
-  background-color: #afa;
+  /* background-color: #afa; */
   text-align: center;
 }
 
@@ -31,7 +31,7 @@
   font-size: 15px;
   width: 33%;
   height: 35px;
-  background-color: #aaf;
+  /* background-color: #aaf; */
 }
 
 .login-btn {
@@ -47,7 +47,8 @@
 
 
 .profile-summary-container {
-  background-color: #ff0;
+  /* background-color: #ff0; */
+  background-color: #fff;
   width: 75%;
   margin: auto;
   margin-top: 55px;
@@ -58,13 +59,13 @@
 .profile-summary-container:last-child {
   */
 .profile-last-row {
-  background-color: #aaa;
+  /* background-color: #aaa; */
   /* padding-bottom: 30px; */
   margin-bottom: 20px;
 }
 
 .profile-row-with-avatar {
-  background-color: #aff;
+  /* background-color: #aff; */
   margin-top: 20px;
 }
 
@@ -81,6 +82,7 @@
   
   margin-left: 20px;
   margin-right: 20px;
+  margin-bottom: 15px;
   
   display: flex;
 }
@@ -97,9 +99,11 @@ hr {
   width: 90px;
 }
 
+/*
 .profile-basic-description-container {
   background-color: #ffa;
 }
+*/
 
 /*
 .first-ele-in-row {
@@ -108,14 +112,14 @@ hr {
 */
 
 .history-container {
-  background-color: #aea;
+  /* background-color: #aea; */
   /* margin-right: 0; */
   margin-left: auto;
   /* vertical-align: bottom; */
 }
 
 .history-container-inner {
-  background-color: #a3a;
+  /* background-color: #a3a; */
   display: flex;
   flex-direction: row;
   /*
@@ -132,7 +136,7 @@ hr {
 }
 
 .bottom-aligned {
-  background-color: #3aa;
+  /* background-color: #3aa; */
   /* display: inline-block; */
   /* margin-top: 20px; */
   margin-bottom: 3px;
@@ -191,7 +195,7 @@ ul.no-bullet-points li {
 }
 
 .profile-tables-header-row {
-  background-color: #0a1;
+  /* background-color: #0a1; */
   height: 70px;
   margin-left: 50px;
   position: relative;
@@ -205,7 +209,7 @@ ul.no-bullet-points li {
 }
 
 .profile-table-container {
-  background-color: #ee3;
+  /* background-color: #ee3; */
   margin-left: 45px;
 }
 
