@@ -33,25 +33,53 @@
   flex-direction: column;
   display: inline-block;
   margin: 1rem;
-  text-align: center;
+  /* text-align: center; */
 }
 
-.select-btn {
+.general-btn {
   background-color: var(--primary-color);
   border: none;
   color: white;
   width: 100%;
   border-radius: 0.5rem;
   padding: 0.25rem 0;
+}
+
+.general-btn:hover {
+  cursor: pointer;
+}
+
+.select-btn {
   text-transform: uppercase;
   font-size: 1rem;
 }
 
-.select-btn:hover {
-  cursor: pointer;
+.unselect-btn {
+  font-size: 1rem;
+  width: 110px;
+}
+
+.unselect-btn > div > * {
+  margin-left: 10px;
 }
 
 .image-card > img {
   width: 150px;
   aspect-ratio: 1;
+}
+
+.imageUploadFormContainer {
+  /* background-color: #333;
+  background-color: #469bd9;
+  */
+  background-color: #eee;
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+
+}
+
+.selected-image-viewer {
+  background-color: #a3a;
+  width: 100%;
 }

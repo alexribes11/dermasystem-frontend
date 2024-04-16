@@ -3,12 +3,19 @@ import styles from './navbar.module.css';
 import { useEffect, useState } from "react";
 import Notifications from "./Notifications";
 import socket from "../utils/socket";
+import axios from 'axios';
+
+const GeneralAxios = axios.create({
+  baseURL: "http://localhost:5005/api/v0/auth"
+});
 
 export type Notification = {
   message: string
 };
 
 export default function Navbar() {
+
+  const [userRole, setUserRole] = useState(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -25,6 +32,14 @@ export default function Navbar() {
       console.log(args);
     });
 
+
+    /*
+    const userInfo = GeneralAxios.get("/user-info", {}, {withCredentials: true});
+    const userRole = (userInfo?.user?).role;
+    */
+    const userRole = "doctor";
+    setUserRole(userRole);
+
     return () => {
       socket.disconnect();
     };
@@ -39,7 +54,9 @@ export default function Navbar() {
           <h1>DermaSystem</h1>
         </div>
         <nav className={styles['links']}>
-          <Link to="/image-upload">Upload Image</Link>
+          {(userRole=="doctor" || userRole=="nurse") &&
+            <Link to="/image-upload">Upload Image</Link>
+          }
           <Link to="/archives">Archives</Link>
           <Link to="/faq">FAQ</Link>
         </nav>

@@ -169,7 +169,7 @@ function ImageUpload(): React.ReactNode {
         fetch("http://localhost:" + PORT_NUMBER + "/process-image", {
             method: 'POST',
             body: formData,
-            credentials: 'include'
+            // credentials: 'include'
         }).then((res) => {
             return res.json()
         }).then((res) => {
