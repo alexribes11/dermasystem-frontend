@@ -12,7 +12,7 @@ export default function RegisterPage() {
     firstName: "John",
     lastName: "Doe",
     email: "johndoe@email.com",
-    role: "Patient",
+    role: "patient",
     username: "johndoe1",
     password: "johndoe"
   });
@@ -23,6 +23,7 @@ export default function RegisterPage() {
 
   const sendRegister = async () => {
     try {
+      console.log("registerData=", registerData);
       const data = await register(registerData);
       navigate("/image-upload", {state: data});
     }
@@ -32,6 +33,7 @@ export default function RegisterPage() {
   }
   
   return <div className={styles['page']}>
+    <button onClick={() => {console.log("registerData=", registerData)}}>Click to print registerData</button>
     <h1>Register</h1>
     <p>Join us</p>
 
@@ -68,10 +70,10 @@ export default function RegisterPage() {
         value={registerData.role}
         onChange={changeRegisterData}
       >
-        <option value="Patient">Patient</option>
-        <option value="Nurse">Nurse</option>
-        <option value="Doctor">Doctor</option>
-        <option value="Admin">Admin</option>
+        <option value="patient">Patient</option>
+        <option value="nurse">Nurse</option>
+        <option value="doctor">Doctor</option>
+        <option value="admin">Admin</option>
       </select>
 
       <h1>Login Details</h1>

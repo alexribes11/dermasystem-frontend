@@ -161,15 +161,18 @@ function ImageUpload(): React.ReactNode {
     function handleUploadImageToProcess() {
         const formData = new FormData();
         formData.append("file", selectedFile);
+
+        let patientInfo = {};
+        formData.append("patient", patientInfo);
         
         // https://stackoverflow.com/questions/49692745/express-using-multer-error-multipart-boundary-not-found-request-sent-by-pos
         // Says to get rid of headers, so that the fetch will automatically
         // set the correct headers for you.
         console.log("RUN handleUploadImageToProcess, Before call fetch.");
-        fetch("http://localhost:" + PORT_NUMBER + "/process-image", {
+        fetch("http://localhost:" + PORT_NUMBER + "/processImage", {
             method: 'POST',
             body: formData,
-            // credentials: 'include'
+            credentials: 'include'
         }).then((res) => {
             return res.json()
         }).then((res) => {

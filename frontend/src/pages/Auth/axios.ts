@@ -31,3 +31,15 @@ export const login = async (body: LoginRequestBody) => {
   //       .catch((err) => console.error("Error occured", err));
 
 }
+
+export const getUserInfo = async () => {
+  const response = await AuthAxios.get("/userInfo", {withCredentials: true});
+  const data = response.data;
+  return data;
+}
+
+export const getLoggedInStatus = async () => {
+  const response = await AuthAxios.get("/loggedInStatus", {withCredentials: true});
+  const data = response.data;
+  return data;
+}

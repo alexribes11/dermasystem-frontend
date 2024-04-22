@@ -1,19 +1,26 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import styles from './navbar.module.css';
 import { useEffect, useState } from "react";
 import Notifications from "./Notifications";
 import socket from "../utils/socket";
 import axios from 'axios';
+import { getUserInfo } from "../pages/Auth/axios"
 
+/*
 const GeneralAxios = axios.create({
   baseURL: "http://localhost:5005/api/v0/auth"
 });
+*/
 
 export type Notification = {
   message: string
 };
 
+
+
 export default function Navbar() {
+  const location = useLocation();
+  const { hash, pathname, search } = location;
 
   const [userRole, setUserRole] = useState(null);
 
@@ -21,6 +28,8 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const [showNotifications, setShowNotifications] = useState(false);
+
+  
 
   useEffect(() => {
 
@@ -37,9 +46,21 @@ export default function Navbar() {
     const userInfo = GeneralAxios.get("/user-info", {}, {withCredentials: true});
     const userRole = (userInfo?.user?).role;
     */
-    const userRole = "doctor";
-    setUserRole(userRole);
+    const fetchData = async () => {
+      console.log("Right before the CALL of getUserInfo");
+      try {
+        const userRole = await getUserInfo();
+        console.log("userRole=", userRole);
+        //setUserRole(userRole);
+      } catch (e) {
+        console.log("error when calling getUserInfo e=", e);
+      }
+    };
 
+    fetchData().catch(console.error);
+
+   
+    
     return () => {
       socket.disconnect();
     };
@@ -54,11 +75,12 @@ export default function Navbar() {
           <h1>DermaSystem</h1>
         </div>
         <nav className={styles['links']}>
-          {(userRole=="doctor" || userRole=="nurse") &&
-            <Link to="/image-upload">Upload Image</Link>
+          
+          {(userRole!=null && (userRole.toLowerCase()=="doctor" || userRole.toLowerCase()=="nurse")) &&
+            <Link to="/image-upload" className={(pathname === "/image-upload" ? styles['underlined'] : "")}>Upload Image</Link>
           }
-          <Link to="/archives">Archives</Link>
-          <Link to="/faq">FAQ</Link>
+          <Link to="/archives" className={(pathname === "/archives" ? styles['underlined'] : "")}>Archives</Link>
+          <Link to="/faq" className={(pathname === "/faq" ? styles['underlined'] : "")}>FAQ</Link>
         </nav>
         <div className={styles['icons']}>
           <img

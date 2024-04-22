@@ -3,6 +3,7 @@ import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
+  Navigate,
 } from "react-router-dom";
 
 import HomePage from './pages/Home/HomePage.tsx';
@@ -13,10 +14,15 @@ import ArchivesPage from './pages/Archives/Archives.tsx';
 import ProfilePage from './pages/Profiles/profiles.tsx';
 import Navbar from './components/Navbar.tsx';
 import Faq from './pages/FAQ/Faq.tsx';
+// import { getLoggedInStatus } from './pages/Auth/axios.ts';
+// import ProtectedRoutes from './ProtectedRoutes.tsx';
 
+// const isLoggedIn = await getLoggedInStatus();
+// console.log("isLoggedIn=", isLoggedIn);
 const router = createBrowserRouter([
   {
     path: "/",
+    // element: <ProtectedRoutes />,
     element: <Navbar />,
     children: [
       {

@@ -87,7 +87,7 @@
   display: flex;
 }
 
-hr {
+#profiles hr {
   border-color: #000;
   margin-left: 20px;
   margin-right: 30px;

@@ -13,7 +13,7 @@ function ProfilePage(): React.ReactNode {
     const profileObj = {personalInfo: {legalFirstName: "Justin", legalLastName: "Baldoni", dob: "01/01/2017", emergencyContact: "Boots"}, gettingStarted: {}, troubleshooting: {}};
 
     return <>
-        <div className={styles['profile-page']}>
+        <div className={styles['profile-page']} id="profiles">
             <div className={styles['hero']}>
                 <div className={styles['profile-summary-container']}>
 

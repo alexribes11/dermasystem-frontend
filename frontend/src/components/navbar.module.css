@@ -65,3 +65,7 @@
 .user-icon {
   display: flex;
 }
+
+.underlined {
+  text-decoration: underline;
+}
