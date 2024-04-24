@@ -16,25 +16,13 @@ export const register = async (body: RegisterRequestBody) => {
 
 export const login = async (body: LoginRequestBody) => {
   console.log("IN axios.ts, RUN login")
-
   const response = await AuthAxios.post("/login", body, {withCredentials: true});
   return response;
-  // fetch("http://localhost:5005/api/v0/auth/login", {
-  //           method: 'POST',
-  //           body: JSON.stringify(body)
-  //       }).then((response) => {
-
-  //         console.log("IN axios.ts, response=", response);
-  //         //const data = response.data;
-  //         //return data;
-  //       })
-  //       .catch((err) => console.error("Error occured", err));
-
 }
 
 export const getUserInfo = async () => {
   const response = await AuthAxios.get("/userInfo", {withCredentials: true});
-  const data = response.data;
+  const data = response.data.userInfo;
   return data;
 }
 

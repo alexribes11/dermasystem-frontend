@@ -1,21 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from './auth.module.css';
 import { login } from "./axios";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
+
+type LoginInfo = {
+  username: string;
+  password: string;
+}
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [loginInfo, setLoginInfo] = useState<LoginInfo>({username: "", password: ""});
+
   const sendLogin = async () => {
     try {
       setLoading(true);
-      const data = await login({username: 'janedoe', password: 'janedoe'});
+      const data = (await login(loginInfo)).data;
       console.log(data);
       setLoading(false);
-      navigate("/image-upload", {state: data.data});
+      navigate("/welcome", {state: data.user});
     } catch(e) {
       console.error(e);
     }
+  }
+
+  const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setLoginInfo({...loginInfo, [e.target.name]: e.target.value})
   }
 
   if (loading) {
@@ -33,9 +44,9 @@ export default function LoginPage() {
 
     <form>
       <h3 className={styles['input-heading']}>Username</h3>
-      <input type="text" />
+      <input type="text" name="username" value={loginInfo.username} onChange={onInputChange} />
       <h3 className={styles['input-heading']}>Password</h3>
-      <input type="password"/>
+      <input type="password" name="password" value={loginInfo.password} onChange={onInputChange} />
       <button className={styles['login-btn']} type="submit" onClick={sendLogin}>LOGIN</button>
     </form>
     

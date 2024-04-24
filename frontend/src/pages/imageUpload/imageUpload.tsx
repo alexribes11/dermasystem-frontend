@@ -1,23 +1,15 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import styles from "./imageUpload.module.css";
-import { Link } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { FiUpload } from "react-icons/fi";
 import {useDropzone} from 'react-dropzone'
+import { useParams } from "react-router-dom";
+import User from "../../types/User";
+import { GetPatient } from "../../utils/api/patients";
 
-//dermasystem logo, image upload icon, browse
-// const socialIcons = [
-//     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/aa8365b2876fbe71abbb736d4f9c98060279931653402cad8a68da12e5fe07a8?apiKey=99043b1e8e4246e2a4338db720628ce9&", alt: "Social icon 1" },
-//     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/60bdb2779606e9d085e962cdb41f71c461b791775f85c94c5b119d65be271d2c?apiKey=99043b1e8e4246e2a4338db720628ce9&", alt: "Social icon 2" },
-//     { src: "https://cdn.builder.io/api/v1/image/assets/TEMP/283a2be89a7ef6ceaf0f927b79efeeb95c76ef2f98d038b5afc3c897abd7fd70?apiKey=99043b1e8e4246e2a4338db720628ce9&", alt: "Social icon 3" },
-//   ];
 
 function ImageUpload(): React.ReactNode {
-    /*
-    <p className={styles["subtitle"]}> or </p>
-    <Link to={"/archives"}><button className={`${styles["register-btn"]} ${styles["btn"]}`}>BROWSE</button></Link>
-    */
-    console.log("TYPEOF = ", typeof(styles.imageUploadFormContainer));
+
     const STANDARD_IMAGE_WIDTH = "200";
     const STANDARD_IMAGE_HEIGHT = "200";
 
@@ -27,30 +19,6 @@ function ImageUpload(): React.ReactNode {
     const [preview, setPreview] = useState<string | ArrayBuffer | null>();
 
     const [pathToProcessedImage, setPathToProcessedImage] = useState('');
-
-    /*
-    const dropArea = document.getElementById("drop-area")
-    if (dropArea != null) {
-        console.log("dropArea is not null");
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false)   
-            document.body.addEventListener(eventName, preventDefaults, false)
-        });
-
-        // Handle dropped files
-        dropArea.addEventListener('drop', handleDrop, false);
-
-        dropArea.addEventListener('mouseover', handleMouseEnter, false);
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, highlight, false)
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, unhighlight, false)
-        });
-    }
-    */
 
     const setPreviewInputImageOnload = (newObjectUrl: string) => {
         // free memory when ever this component is unmounted
@@ -95,6 +63,16 @@ function ImageUpload(): React.ReactNode {
       }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
+    const {patientId} = useParams() as {patientId: string};
+    const [patient, setPatient] = useState<User | undefined>();
+
+    useEffect(() => {
+      const fetchPatient = async () => {
+        const patient = await GetPatient(patientId);
+        setPatient(patient);
+      }
+      fetchPatient();
+    }, [patientId]);
 
     function preventDefaults(e) {
         console.log("RUN preventDefaults");
@@ -161,9 +139,7 @@ function ImageUpload(): React.ReactNode {
     function handleUploadImageToProcess() {
         const formData = new FormData();
         formData.append("file", selectedFile);
-
-        let patientInfo = {};
-        formData.append("patient", patientInfo);
+        formData.append("patientId", patientId);
         
         // https://stackoverflow.com/questions/49692745/express-using-multer-error-multipart-boundary-not-found-request-sent-by-pos
         // Says to get rid of headers, so that the fetch will automatically
@@ -179,13 +155,6 @@ function ImageUpload(): React.ReactNode {
             console.log("POST process-image .then(), res=", res);
 
             setPathToProcessedImage("http://localhost:" + PORT_NUMBER + "/static/" + res.processedFilename);
-            /*
-            fetch("http://localhost:" + PORT_NUMBER + "/static/" + res.pathToProcessedFile, {
-                method: 'GET'
-            }).then((res) => {
-                return res.json()
-            });
-            */
         })
         .catch((err) => (err));
 
@@ -196,57 +165,14 @@ function ImageUpload(): React.ReactNode {
         setPathToProcessedImage('');
     }
 
-    /*
-    useEffect(() => {
-        if (!selectedFile) {
-            setPreview(undefined);
-            return;
-        }
-
-        const objectUrl = URL.createObjectURL(selectedFile)
-        setPreview(objectUrl);
-
-        // free memory when ever this component is unmounted
-        return () => URL.revokeObjectURL(objectUrl)
-    }, [selectedFile])
-    */
-
-    /*
-    const form = document.getElementById("form");  
-    form?.addEventListener("submit", handleUploadImageToProcess);
-    <form id="form">
-            <label>Test field:  <input type="file" name="uploadImageButton"></input></label>
-            <br /><br />
-            <input type="submit" value="Click to Upload Image" />
-            </form>
-    */
-
         console.log("pathToProcessedImage=", pathToProcessedImage);
 
-    /*
-    It used to be {!selectedFile && },
-    but now it is {!preview && }.
-    */
     return <>
         <section>
-            {/* <header>
-                <h3>Dermasystem</h3>
-                <img className={styles.logo} src="/logo.png"></img>
-                <nav className="nav-links">
-                    <div className="nav-link nav-link active"> insert image</div>
-                    <div className="nav-link"> archives</div>
-                    <div className="nav-link"> FAQ</div>
-                </nav>
-                    <img src="/helpIcon.png" />
-                    <img src="/notifIcon.png" />
-                    <img src="/userIcon.png"/>
-                </header> */}
-            
-             {/* image upload*/}
-
             <div className={styles.imageUploadFormContainer}>
-                <div className={styles.centeredRow + " " + styles.topMostRow}>
+                <div className={styles.centeredRow + " " + styles.topMostRow + " " + styles.header}>
                     <h2>Image Upload</h2>
+                    <h3>Patient: {patient?.firstName} {patient?.lastName} </h3>
                 </div>
                 <div className={styles.imageUploadFormContainerRow}>
                     <div className={styles.imageUploadFormContainerCol}>

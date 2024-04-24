@@ -1,0 +1,51 @@
+.page {
+  height: 100vh;
+}
+
+.page > h1 {
+  text-align: center;
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  justify-content: center;
+}
+
+.search > p {
+  text-align: center;
+}
+
+.search > input {
+  width: 300px;
+  margin: auto;
+}
+
+.search > button {
+  width: 300px;
+  margin: auto;
+}
+
+.hospitals {
+  margin: 1rem;
+  height: 500px;
+  overflow: scroll;
+}
+
+.hospitals > div {
+  margin-bottom: 1rem;
+}
+
+.hospitals > div:hover {
+  background-color: var(--primary-color-light);
+}
+
+.navigation {
+  display: flex;
+  justify-content: center;
+}
+
+.selected {
+  background-color: var(--primary-color-light);
+}

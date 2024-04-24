@@ -1,84 +1,41 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import styles from './navbar.module.css';
 import { useEffect, useState } from "react";
-import Notifications from "./Notifications";
-import socket from "../utils/socket";
-import axios from 'axios';
-import { getUserInfo } from "../pages/Auth/axios"
-
-/*
-const GeneralAxios = axios.create({
-  baseURL: "http://localhost:5005/api/v0/auth"
-});
-*/
-
-export type Notification = {
-  message: string
-};
-
-
+import { getUserInfo } from "../pages/Auth/axios";
+import User from "../types/User";
 
 export default function Navbar() {
-  const location = useLocation();
-  const { hash, pathname, search } = location;
 
-  const [userRole, setUserRole] = useState(null);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-
-  const [showNotifications, setShowNotifications] = useState(false);
-
+  const { pathname } = useLocation();
+  const [user, setUser] = useState<User | undefined>();
   
+  const navigate = useNavigate();
 
   useEffect(() => {
-
-    socket.on("connect", () => {
-      console.log("Connected to server.");
-    });
-
-    socket.on("PatientImageRequested", (args) => {
-      console.log(args);
-    });
-
-
-    /*
-    const userInfo = GeneralAxios.get("/user-info", {}, {withCredentials: true});
-    const userRole = (userInfo?.user?).role;
-    */
     const fetchData = async () => {
-      console.log("Right before the CALL of getUserInfo");
       try {
-        const userRole = await getUserInfo();
-        console.log("userRole=", userRole);
-        //setUserRole(userRole);
+        const data = await getUserInfo();
+        setUser(data);
       } catch (e) {
-        console.log("error when calling getUserInfo e=", e);
+        console.error(e);
+        navigate("/login");
       }
     };
+    if (!user) {
+      fetchData();
+    }
+  }, [user]);
 
-    fetchData().catch(console.error);
-
-   
-    
-    return () => {
-      socket.disconnect();
-    };
-
-  });
 
   return <div className={styles['page']}>
     <div className={styles['header-and-main']}>
-      <header className={styles['navbar']}>
+      {user && <header className={styles['navbar']}>
         <div className={styles['logo']}>
           <img src="logo.png"/>
           <h1>DermaSystem</h1>
         </div>
         <nav className={styles['links']}>
-          
-          {(userRole!=null && (userRole.toLowerCase()=="doctor" || userRole.toLowerCase()=="nurse")) &&
-            <Link to="/image-upload" className={(pathname === "/image-upload" ? styles['underlined'] : "")}>Upload Image</Link>
-          }
+          {user.userRole !== "patient" && <Link to={"/patients"}>Patients</Link>}
           <Link to="/archives" className={(pathname === "/archives" ? styles['underlined'] : "")}>Archives</Link>
           <Link to="/faq" className={(pathname === "/faq" ? styles['underlined'] : "")}>FAQ</Link>
         </nav>
@@ -86,17 +43,15 @@ export default function Navbar() {
           <img
             src="icons/notification.png"
             className={styles['notification-icon']}
-            onClick={() => setShowNotifications(!showNotifications)}
           />
           <Link to="/profile" className={styles['user-icon']}>
             <img src="icons/user.png" />
           </Link>
         </div>
-      </header>
-      <Outlet/>
+      </header>}
+      <Outlet context={{user, setUser}}/>
     </div>
     <aside>
-      {showNotifications && <Notifications notifications={notifications}/>}
     </aside>
   </div>
 }

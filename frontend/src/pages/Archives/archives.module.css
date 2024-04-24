@@ -12,11 +12,10 @@ body {
 }
 
 .leftColumn {
-  background-color: #faf;
-  width: 20%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-right: 1rem;
 }
 
 .leftColumnDetails {
@@ -28,7 +27,7 @@ body {
 }
 
 .filter-form {
-  background-color: #faf;
+  height: 100%;
 }
 
 .filter-input {
@@ -57,15 +56,12 @@ body {
 
 .leftColumnButton {
   background-color: #d00;
-  /* display: block; */
-  /* margin: 0 auto; */
   margin: 0 auto;
   margin-bottom: 35px;
   width: 60%;
   height: 35px;
   border-radius: 20px;
   border: none;
-
   color: #fff;
 }
 
@@ -74,9 +70,6 @@ body {
   margin-left: 1rem;
   padding-left: 1rem;
   width: 100%;
-  background-color: #00a;
-  /* display: flex; */
-  /* flex-direction: column; */
 }
 
 .archives > input {

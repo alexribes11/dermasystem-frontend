@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEventHandler, FormEvent, useContext, useEffect, useState } from 'react';
 import { PatientImage } from './PatientImage';
 import { Patient } from './Patient';
 import styles from './archives.module.css';
@@ -7,79 +7,66 @@ import styles from './archives.module.css';
 import { IconContext } from "react-icons";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import ReactModal from 'react-modal';
+import UserContext from '../../context/UserContext';
+import { useOutletContext } from 'react-router-dom';
+import { FetchImages } from '../../utils/api/images';
+import User from '../../types/User';
+import { GetPatients } from '../../utils/api/patients';
+import Photo from '../../types/Photo';
 
 export default function ArchivesPage() {
+
   function formatAMPM(date: Date) {
-    /*
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    const minutesStr = minutes < 10 ? '0'+minutes : (minutes.toString());
-    const strTime = hours + ':' + minutesStr + ' ' + ampm;
-    // return strTime;
-    */
-    return date.toLocaleString('en-US', { year: 'numeric', month: 'long', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true });
+    return date.toLocaleString(
+      'en-US', 
+      { 
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+        hour: 'numeric', 
+        minute: 'numeric', 
+        hour12: true
+     }
+    );
   }
 
-  const PORT_NUMBER = 5005;
-
-  const catImageUrl = "https://media.istockphoto.com/id/1385217969/photo/ginger-cat-walks.jpg?s=612x612&w=0&k=20&c=mBhFzDA2dp23dV4jq6FooaSzG2tmCZMKP6TV56hMVII=";
-  const [images, setImages] = useState<PatientImage[]>([{patientName: "Richard", imageUrl: catImageUrl, dateUploaded: "April 15, 2024", patientId: "asdf"}]);
-  const [patients, setPatients] = useState<Patient[]>([{firstName: "Albert", lastName: "Einstein", role: "patient",
-  username: "aeinstein01",
-  password: "aeinstein",
-  email: "aeinstein01@gmail.com",
-  hospitalId: "781",
-  userId: "12495",
-  doctorId: "1939",}]);
+  const [images, setImages] = useState<Photo[]>([]);
 
   const [refreshImagesFlag, setRefreshImagesFlag] = useState(false);
 
   const [visibleDeleteModal, setVisibleDeleteModal] = useState(false);
 
-  // if imageSelected is null, then we assume that no image has been selected.
-  // = useState(catImageUrl);
-  const [imageSelected, setImageSelected] = useState<null|object>(null);
+  const [patientSelected, setPatientSelected] = useState("");
+  const [imageSelected, setImageSelected] = useState<null|Photo>(null);
 
   const [imageSelectedInfo, setImageSelectedInfo] = useState({});
-  // .imageUrl, .patientName, .dateUploaded, .uploadedBy
 
   const [filterData, setFilterData] = useState({patientName: "", dateFrom: "", dateTo: ""});
 
+  const getImages = async (patientId: string) => {
+    const { photos } = await FetchImages(patientId);
+    console.log(photos);
+    setImages(photos);
+  }
+
+  const [patients, setPatients] = useState<User[]>([]);
+
+  const getPatients = async () => {
+    const data = await GetPatients();
+    setPatients(data);
+  }
+
+  const { user } = useOutletContext() as UserContext;
+  
   useEffect(() => {
-    const fetchImages = async () => {
-      const response = await fetch('http://localhost:5005/api/v0/images', {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      const { photos } = data;
-      console.log("photos=", photos);
-      // convertStringsToObjects
-      for (let i=0; i < photos.length; i++) {
-        if (typeof(photos[i]) == "string") {
-          console.log("IN FOR LOOP AFTER GETTING PHOTOS, typeof(photos[i]) == 'string'");
-          photos[i] = {imageUrl: photos[i]}
-        }
-      }
-
-      setVisibleDeleteModal(false);
-      setImageSelected(null);
-      setImages(photos);
+    if (user?.userRole === "patient") {
+      getImages(user.id);
+    } else {
+      getPatients();
     }
-    fetchImages();
+    setVisibleDeleteModal(false);
+    setImageSelected(null);
 
-    const fetchPatients = async () => {
-      const response = await fetch('http://localhost:5005/api/v0/patients', {
-        credentials: 'include'
-      });
-      const data = await response.json();
-      const { patients } = data;
-      console.log("patients=", patients);
-      setPatients(patients);
-    }
-    fetchImages();
   }, [refreshImagesFlag]);
 
   const selectImage = (imageToSelect) => {
@@ -134,6 +121,16 @@ export default function ArchivesPage() {
     
   }
 
+  const search = () => {
+    console.log(patientSelected);
+    getImages(patientSelected);
+  };
+
+  const onSelectChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    const patientSelected = e.target.value;
+    setPatientSelected(patientSelected);
+  }
+
   return (
       <div className={styles.page} id="Archives">
         {imageSelected==null &&
@@ -141,14 +138,14 @@ export default function ArchivesPage() {
             <form onSubmit={handleSubmit} className={styles['filter-form']}>
             <h1 className={styles['leftColumnTitle']}>Filter</h1>
             <h3>Patient:</h3>
-            <select className={styles['filter-input']}>
-              {patients.map((patient) => <option>{patient.firstName + " " + patient.lastName}</option>)}
+            <select className={styles['filter-input']} value={patientSelected} onChange={onSelectChange}>
+              {patients.map((patient) => <option value={patient.id} key={patient.id}>{patient.firstName + " " + patient.lastName}</option>)}
             </select>
             <h3>Start Date</h3>
             <input type='date' className={styles['filter-input']} value={filterData.dateFrom} onChange={(e) => {setFilterData({...filterData, dateFrom: e.target.value})}}></input>
             <h3>End Date</h3>
             <input type='date' className={styles['filter-input']} value={filterData.dateTo} onChange={(e) => {setFilterData({...filterData, dateTo: e.target.value})}}></input>
-            <input type="submit" className={styles['filter-input'] + " " + styles['centered-btn']} value="Search" />
+            <button onClick={search} className={styles['filter-input'] + " " + styles['centered-btn']}>Search</button>
             </form>
           </div>
         }
@@ -168,9 +165,8 @@ export default function ArchivesPage() {
         
           {imageSelected==null && images.map((image) => {
               return <div className={styles.archives}>
-                <div className={styles['image-card']} key={image.displayImageUrl}>
-                <img src={image.displayImageUrl} className={styles.image}/>
-                <h4>{image.patientName}</h4>
+                <div className={styles['image-card']} key={image.imgUrl}>
+                <img src={image.imgUrl} className={styles.image}/>
                 <p>{formatAMPM(new Date(image.dateUploaded))}</p>
                 <button className={styles['general-btn'] + ' ' + styles['select-btn']} onClick={() => selectImage(image)}>Select</button>
               </div>
@@ -208,12 +204,12 @@ export default function ArchivesPage() {
 
             <div className={styles.imageUploadFormContainer}>
               <div className={styles.imageInDoubleContainer}>
-                <img src={imageSelected.displayImageUrl} />
+                <img src={imageSelected.imgUrl} />
                 <div>Original Image</div>
               </div>
 
               <div className={styles.imageInDoubleContainer}>
-                <img src={catImageUrl} />
+                <img src={imageSelected.imgUrl} />
                 <div>Image with Hair Removed</div>
               </div>
 

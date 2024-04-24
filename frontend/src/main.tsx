@@ -3,30 +3,30 @@ import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate,
 } from "react-router-dom";
 
 import HomePage from './pages/Home/HomePage.tsx';
 import ImageUpload from './pages/imageUpload/imageUpload.tsx';
 import LoginPage from './pages/Auth/Login.tsx';
-import RegisterPage from './pages/Auth/Register.tsx';
+import RegisterPage from './pages/Auth/Register/Register.tsx';
 import ArchivesPage from './pages/Archives/Archives.tsx';
 import ProfilePage from './pages/Profiles/profiles.tsx';
 import Navbar from './components/Navbar.tsx';
 import Faq from './pages/FAQ/Faq.tsx';
-// import { getLoggedInStatus } from './pages/Auth/axios.ts';
-// import ProtectedRoutes from './ProtectedRoutes.tsx';
+import WelcomePage from './pages/Welcome/WelcomePage.tsx';
+import PatientsPage from './pages/Patients/PatientsPage.tsx';
 
-// const isLoggedIn = await getLoggedInStatus();
-// console.log("isLoggedIn=", isLoggedIn);
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <ProtectedRoutes />,
     element: <Navbar />,
     children: [
       {
-        path: "/image-upload",
+        index: true,
+        element: <HomePage />
+      },
+      {
+        path: "/image-upload/:patientId",
         element: <ImageUpload />
       },
       {
@@ -40,15 +40,6 @@ const router = createBrowserRouter([
       {
         path: "/faq",
         element: <Faq />
-      }
-    ]
-  },
-  {
-    path:  "/",
-    children: [
-      {
-        path: "home",
-        element: <HomePage />
       },
       {
         path: "/login",
@@ -58,6 +49,14 @@ const router = createBrowserRouter([
         path: "/register",
         element: <RegisterPage />
       },
+      {
+        path: "/welcome",
+        element: <WelcomePage /> 
+      },
+      {
+        path:"/patients",
+        element: <PatientsPage />
+      }
     ]
   }
 ]);

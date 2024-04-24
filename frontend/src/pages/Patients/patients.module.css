@@ -1,0 +1,11 @@
+.patient {
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.img {
+  margin-right: 1rem;
+}

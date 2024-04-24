@@ -48,3 +48,7 @@
   text-decoration: underline;
   color: rgb(112, 112, 112);
 }
+
+.hospitalRegister input{
+  width: 300px;
+}
