@@ -14,10 +14,9 @@ export const register = async (body: RegisterRequestBody) => {
   return data;
 }
 
-export const login = async (body: LoginRequestBody) => {
-  console.log("IN axios.ts, RUN login")
+export const Login = async (body: LoginRequestBody) => {
   const response = await AuthAxios.post("/login", body, {withCredentials: true});
-  return response;
+  return response.data;
 }
 
 export const getUserInfo = async () => {

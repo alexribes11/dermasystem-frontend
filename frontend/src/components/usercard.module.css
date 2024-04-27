@@ -1,0 +1,100 @@
+.container {
+  background-color: var(--primary-color-light);
+  border-top: 1.5rem solid var(--primary-color);
+  border-radius: 1rem;
+  width: 300px;
+  padding: 1.5rem;
+  padding-top: 1rem;
+  display: inline-block;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+}
+
+.container > .main {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.profile-pic {
+  width: 50px;
+  aspect-ratio: 1;
+  margin-bottom: 0.5rem;
+}
+
+.name {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.role {
+  color: rgb(117, 115, 115);
+}
+
+.edit-btn {
+  height: max-content;
+  width: max-content;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
+
+.edit-btn > img {
+  margin: 0;
+}
+
+.edit-btn:hover {
+  cursor: pointer;
+}
+
+.contact-info {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 0.1rem 0;
+  margin-top: 0.5rem;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  margin: 1rem;
+}
+
+.contact-info img {
+  margin-right: 0.5rem;
+  width: 25px;
+}
+
+.action-menu {
+  position: absolute;
+  top: 2rem;
+  right: 0;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem 0 0.5rem 0.5rem;
+  border-top: 0.75rem solid var(--primary-color);
+  display: flex;
+}
+
+.action-menu > button {
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  margin: 0 0.25rem;
+  padding: 0.25rem 1rem;
+}
+
+.lower-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lower-buttons * {
+  text-decoration: none;
+}
+
+.lower-buttons > button:hover {
+  cursor: pointer;
+}

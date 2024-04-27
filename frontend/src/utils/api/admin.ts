@@ -1,3 +1,4 @@
+import { Staff } from "../../types/Staff";
 import Axios from "./axios";
 
 const baseEndpoint = "/admin"
@@ -27,4 +28,9 @@ export const GetNurses = async () => {
   const response = await Axios.get(`${baseEndpoint}/nurses`);
   const data = response.data;
   return data;
+}
+
+export const RemoveStaff = async (staff: Staff) => {
+  const response = await Axios.delete(`${baseEndpoint}/${staff.id}`);
+  return response.data;
 }

@@ -7,3 +7,8 @@ export const GetSessionInfo = async () => {
   const data = response.data;
   return data;
 }
+
+export const Logout = async () => {
+  const response = await Axios.post(`${baseEndpoint}/logout`);
+  return response;
+}

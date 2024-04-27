@@ -1,5 +1,5 @@
 import { FormEventHandler, useState } from "react";
-import { RegisterPages } from "./Register";
+import { RegisterPages } from "../types/register";
 
 type props = {
   goTo: (page: RegisterPages) => void;

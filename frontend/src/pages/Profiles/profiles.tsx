@@ -1,13 +1,18 @@
 import React from "react";
 import styles from "./profiles.module.css";
-// import { Link } from "react-router-dom";
+import LogoutButton from "./LogoutButton";
+import { useOutletContext } from "react-router-dom";
+import UserContext from "../../context/UserContext";
 
 function ProfilePage(): React.ReactNode {
+
+    const { user } = useOutletContext() as UserContext;
+
     const attributesList = [{name: "Age", value: 25},
     {name: "Gender", value: "Male"},
     {name: "Phone Number", value: "1-888-888-8888"},
     {name: "Email", value: "explorer@gmail.com"}];
-
+    
     const objKeysToDisplayedNames = {"personalInfo": "Personal Information",
     "legalFirstName":"Legal First Name", "gettingStarted": "Getting Started", "troubleshooting": "Troubleshooting"}
     const profileObj = {personalInfo: {legalFirstName: "Justin", legalLastName: "Baldoni", dob: "01/01/2017", emergencyContact: "Boots"}, gettingStarted: {}, troubleshooting: {}};
@@ -15,14 +20,14 @@ function ProfilePage(): React.ReactNode {
     return <>
         <div className={styles['profile-page']} id="profiles">
             <div className={styles['hero']}>
+                <LogoutButton />
                 <div className={styles['profile-summary-container']}>
-
                     <section className={styles['profile-row-with-avatar']}>
                         <div className={styles['profile-row-inner']}>
                             <img src="images/profile-pic-justin-baldoni.jpeg" className={styles["profile-avatar"] + " " + styles["first-ele-in-row"]} />
                             <div className={styles['profile-basic-description-container']}>
-                                <h3>Justin Baldoni</h3>
-                                <p className={styles["subtitle"]}>patient</p>
+                                <h3>{user?.firstName} {user?.lastName}</h3>
+                                <p className={styles["subtitle"]}>{user?.userRole}</p>
                             </div>
 
                             <div className={styles['history-container']}>

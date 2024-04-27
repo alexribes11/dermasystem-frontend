@@ -1,34 +1,18 @@
-import { ChangeEventHandler, FormEvent, useContext, useEffect, useState } from 'react';
-import { PatientImage } from './PatientImage';
-import { Patient } from './Patient';
+import { ChangeEventHandler, useEffect, useState } from 'react';
 import styles from './archives.module.css';
-// import stylesImage from '../imageUpload/imageUpload.module.css';
-
 import { IconContext } from "react-icons";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import ReactModal from 'react-modal';
 import UserContext from '../../context/UserContext';
 import { useOutletContext } from 'react-router-dom';
-import { FetchImages } from '../../utils/api/images';
+import { DeleteImage, FetchImages, RecoverImage } from '../../utils/api/images';
 import User from '../../types/User';
 import { GetPatients } from '../../utils/api/patients';
 import Photo from '../../types/Photo';
+import { formatAMPM } from '../../utils/formatAMPM';
+import ImageCard from './ImageCard';
 
 export default function ArchivesPage() {
-
-  function formatAMPM(date: Date) {
-    return date.toLocaleString(
-      'en-US', 
-      { 
-        year: 'numeric',
-        month: 'long',
-        day: '2-digit',
-        hour: 'numeric', 
-        minute: 'numeric', 
-        hour12: true
-     }
-    );
-  }
 
   const [images, setImages] = useState<Photo[]>([]);
 
@@ -38,8 +22,6 @@ export default function ArchivesPage() {
 
   const [patientSelected, setPatientSelected] = useState("");
   const [imageSelected, setImageSelected] = useState<null|Photo>(null);
-
-  const [imageSelectedInfo, setImageSelectedInfo] = useState({});
 
   const [filterData, setFilterData] = useState({patientName: "", dateFrom: "", dateTo: ""});
 
@@ -52,8 +34,11 @@ export default function ArchivesPage() {
   const [patients, setPatients] = useState<User[]>([]);
 
   const getPatients = async () => {
-    const data = await GetPatients();
+    const data = await GetPatients() as User[];
     setPatients(data);
+    if (data.length > 0) {
+      setPatientSelected(data[0].id);
+    }
   }
 
   const { user } = useOutletContext() as UserContext;
@@ -64,12 +49,15 @@ export default function ArchivesPage() {
     } else {
       getPatients();
     }
+  }, []);
+
+  useEffect(() => {
     setVisibleDeleteModal(false);
     setImageSelected(null);
 
   }, [refreshImagesFlag]);
 
-  const selectImage = (imageToSelect) => {
+  const selectImage = (imageToSelect: Photo) => {
     console.log("RUn selectImage imageToSelect=", imageToSelect);
     setImageSelected(imageToSelect);
   }
@@ -95,30 +83,18 @@ export default function ArchivesPage() {
     setVisibleDeleteModal(false);
   }
 
-  function sendDeleteRequest() {
-    console.log("RUN sendDeleteRequest imageSelected.imageUrl=", imageSelected.imageUrl)
-    //imageSelected.imageUrl
+  async function sendDeleteRequest() {
+    if (!imageSelected) return;
+    await DeleteImage(imageSelected.patientId, imageSelected.id);
+    setImages(images.filter(img => img.id !== imageSelected.id));
+    setRefreshImagesFlag(!refreshImagesFlag);
+  }
 
-    fetch("http://localhost:" + PORT_NUMBER + "/api/v0/images/scheduleDelete", {
-            method: 'PUT',
-            body: JSON.stringify({photoToScheduleDelete: imageSelected.imageUrl}),
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: 'include'
-        }).then((res) => {
-          console.log("res=", res);
-          if (res.status == 200) {
-            // Send the user back to the main page of Archives page,
-            // which shows all the images.
-
-            setRefreshImagesFlag(!refreshImagesFlag);
-            
-          }
-        })
-        .catch((err) => (err));
-
-    
+  async function recoverImage() {
+    if (!imageSelected) return;
+    await RecoverImage(patientSelected, imageSelected); 
+    setImageSelected(null);
+    setRefreshImagesFlag(!refreshImagesFlag);
   }
 
   const search = () => {
@@ -145,10 +121,15 @@ export default function ArchivesPage() {
             <input type='date' className={styles['filter-input']} value={filterData.dateFrom} onChange={(e) => {setFilterData({...filterData, dateFrom: e.target.value})}}></input>
             <h3>End Date</h3>
             <input type='date' className={styles['filter-input']} value={filterData.dateTo} onChange={(e) => {setFilterData({...filterData, dateTo: e.target.value})}}></input>
+            {user?.userRole === "admin" && <>
+              <h3>Recently Deleted</h3>
+              <input type='checkbox' />
+            </>}
             <button onClick={search} className={styles['filter-input'] + " " + styles['centered-btn']}>Search</button>
             </form>
           </div>
         }
+
         {imageSelected!=null && <div className={styles.leftColumn}>
           <div className={styles.leftColumnDetails}>
           <h1 className={styles['leftColumnTitle']}>Photo Details</h1>
@@ -157,21 +138,30 @@ export default function ArchivesPage() {
           <h3>Date Uploaded:</h3>
           <p className={styles['leftColumnEntry']}>{formatAMPM(new Date(imageSelected.dateUploaded))}</p>
           <h3>Uploaded By:</h3>
-          <p className={styles['leftColumnEntry']}>{imageSelected.uploadedBy}</p>
+          <p className={styles['leftColumnEntry']}>{imageSelected.uploadedBy.name}</p>
+          <h3>Diagnosis:</h3>
+          <p className={styles['leftColumnEntry']}>{imageSelected.diagnosis}</p>
+          {user?.userRole === "admin" && <>
+            {imageSelected.dateDeleted !== null && <>
+              <h3>Date Deleted:</h3>
+              <p className={styles['leftColumnEntry']}>{formatAMPM(new Date(imageSelected.dateDeleted))}</p>
+              <h3>Deleted By:</h3>
+              <p className={styles['leftColumnEntry']}>{imageSelected.deletedBy?.name}</p>
+            </>}
+          </>}
           </div>
+          { !imageSelected.dateDeleted && <button className={styles['leftColumnButton']} onClick={() => showDeleteModal()}>Delete</button> }
 
-          <button className={styles['leftColumnButton']} onClick={() => showDeleteModal()}>Delete</button>
+          { imageSelected.dateDeleted && user?.userRole === "admin" && 
+              <button className={styles['leftColumnButton'] + " " + styles['recoverButton']} onClick={() => recoverImage()}>Recover</button>
+          }
           </div>}
         
-          {imageSelected==null && images.map((image) => {
-              return <div className={styles.archives}>
-                <div className={styles['image-card']} key={image.imgUrl}>
-                <img src={image.imgUrl} className={styles.image}/>
-                <p>{formatAMPM(new Date(image.dateUploaded))}</p>
-                <button className={styles['general-btn'] + ' ' + styles['select-btn']} onClick={() => selectImage(image)}>Select</button>
-              </div>
-              </div>
-          })}
+          {imageSelected==null && <div className={styles.archives}>
+            {images.map(image => <ImageCard photo={image} onClick={selectImage} key={image.imgUrl}/>)}
+           </div>
+          }
+
           {imageSelected!=null && <div className={styles['selected-image-viewer']}>
             <ReactModal isOpen={visibleDeleteModal} className={styles['deleteModal'] + " " + styles['modal']}>
               <div className={styles['deleteModalContent']}>

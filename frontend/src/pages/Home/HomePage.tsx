@@ -1,25 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './home.module.css';
-import { useEffect } from 'react';
-import socket from '../../utils/socket';
 
 function HomePage() {
-
-    useEffect(() => {
-      socket.on("connect", () => {
-        console.log('Connected to server');
-      });
-
-      socket.off('disconnect', () => {
-        console.log('Disconnected from server');
-      });
-
-      return () => {
-        if (socket.connected) {
-          socket.disconnect();
-        }
-      }
-    });
     
     return <div className={styles['home-page']}>
         <div className={styles['section']}>

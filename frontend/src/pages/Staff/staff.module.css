@@ -1,0 +1,9 @@
+.page {
+  padding: 1.5rem;
+}
+.page > h2{
+  margin-bottom: 0.5rem;
+}
+.icon {
+  margin-right: 0.5rem;
+}

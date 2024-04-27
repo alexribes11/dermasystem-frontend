@@ -10,3 +10,22 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.primary-btn {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+.secondary-btn {
+  color: black;
+  background-color: var(--gray);
+}

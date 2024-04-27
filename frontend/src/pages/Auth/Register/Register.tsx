@@ -1,43 +1,36 @@
 import styles from '../auth.module.css';
-import RegisterRequestBody from "../types/RegisterRequestResponse";
 import { useState } from "react";
 import PersonalDetailsForm from "./PersonalDetailsForm";
 import HospitalForm from "./HospitalSelectionForm";
 import LoginDetailsForm from "./LoginDetailsForm";
 import AdminHospitalSelection from './AdminHospitalSelection';
 import RegisterHospitalForm from './RegisterHospitalForm';
-
-export type RegisterDataControls = {
-  registerData: RegisterRequestBody;
-  setRegisterData: (data: RegisterRequestBody | ((data: RegisterRequestBody) => RegisterRequestBody)) => void;
-}
-
-export enum RegisterPages {
-  PERSONAL_DETAILS,
-  HOSPITAL_SELECTION,
-  ADMIN_HOSPITAL_SELECT,
-  REGISTER_HOSPITAL,
-  LOGIN_DETAILS
-}
+import { HospitalRegisterInfo, RegisterDataControls, RegisterPages, UserRegisterInfo } from '../types/register';
 
 export default function RegisterPage() {
 
   const [page, setPage] = useState(RegisterPages.PERSONAL_DETAILS);
 
-  const [registerData, setRegisterData] = useState<RegisterRequestBody>({
-    firstName: "John",
-    lastName: "Doe",
-    email: "johndoe@email.com",
+  const [registerData, setRegisterData] = useState<UserRegisterInfo>({
+    firstName: "",
+    lastName: "",
+    email: "",
     role: "patient",
-    username: "johndoe1",
-    password: "johndoe",
+    username: "",
+    password: "",
     hospitalId: "",
-    isRegisteringHospital: false
   });
+
+  const [hospitalData, setHospitalData] = useState<HospitalRegisterInfo | undefined>();
 
   const registerDataControls: RegisterDataControls = {
     registerData,
     setRegisterData
+  }
+
+  const hospitalControls = {
+    hospitalData,
+    setHospitalData
   }
 
   const goTo = (page: RegisterPages) => {
@@ -51,16 +44,16 @@ export default function RegisterPage() {
       case RegisterPages.HOSPITAL_SELECTION:
         return <HospitalForm registerDataControls={registerDataControls} goTo={goTo}/>;
       case RegisterPages.LOGIN_DETAILS:
-        return <LoginDetailsForm registerDataControls={registerDataControls} goTo={goTo}/>;
+        return <LoginDetailsForm registerDataControls={registerDataControls} hospitalControls={hospitalControls} goTo={goTo}/>;
       case RegisterPages.ADMIN_HOSPITAL_SELECT:
         return <AdminHospitalSelection goTo={goTo}/>;
       case RegisterPages.REGISTER_HOSPITAL:
-        return <RegisterHospitalForm registerDataControls={registerDataControls} goTo={goTo}/>
+        return <RegisterHospitalForm hospitalControls={hospitalControls} goTo={goTo}/>
     }
   }
 
   return <div className={styles['page']}>
-    <button onClick={() => {console.log("registerData=", registerData)}}>Click to print registerData</button>
+    {/* <button onClick={() => {console.log("registerData=", registerData)}}>Click to print registerData</button> */}
     {getPage()}
   </div>
 }

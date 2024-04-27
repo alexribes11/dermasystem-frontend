@@ -1,11 +1,125 @@
-.patient {
-  border: 1px solid;
-  display: flex;
-  align-items: center;
-  margin: 1rem;
+.page {
   padding: 1rem;
+  padding-left: 3rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  max-height: 100%;
 }
 
-.img {
-  margin-right: 1rem;
+.patients-container {
+  flex-grow: 1;
+  margin-top: 1rem;
+}
+
+.fa-icon {
+  font-size: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+.popup-form {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 1rem;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  padding: 1rem;
+  width: 80%;
+  max-width: 500px;
+  height: 90%;
+}
+
+.staff-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+}
+
+.user-option:hover {
+  background-color: var(--primary-color-light);
+}
+
+.popup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-form .profile-pic {
+  margin: 0;
+  margin-right: 0.5rem;
+}
+
+.selected {
+  background-color: var(--primary-color-light);
+}
+
+.close-popup {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1.25rem;
+}
+
+.close-popup:hover {
+  cursor: s;
+}
+
+.popup-main {
+  flex-grow: 1;
+  margin-bottom: 1rem;
+  overflow: scroll;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.nav > p {
+  margin-right: 1.5rem;
+}
+
+.nav > p:last-of-type {
+  margin-right:0;
+}
+
+.nav > p:hover {
+  cursor: pointer;
+}
+
+.link {
+  color: gray;
+}
+
+.active-link {
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.nurses-container {
+  margin-top: 2rem;
+}
+
+.search-bar {
+  border-radius: 5rem;
+  border: 1px solid black;
+  width: 50%;
+  max-width: 500px;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.unassign {
+  justify-self: end;
+}
+
+.staff-card--info {
+  display: flex;
 }

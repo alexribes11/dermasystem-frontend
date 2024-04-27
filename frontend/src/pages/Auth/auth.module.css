@@ -8,8 +8,7 @@
 
 .header {
   display: flex;
-  width: 50%;
-  max-width: 500px;
+  width: 300px;
   margin-bottom: 2rem;
 }
 
@@ -17,38 +16,53 @@
   margin-left: 0.75rem;
 }
 
-.page > form {
-  width: 50%;
-  max-width: 500px;
+.form {
+  width: 300px;
 }
 
-.page > form > input {
+.input-container {
+  margin-bottom: 1.5rem;
+}
+
+.input-container * {
   width: 100%;
-  margin-bottom: 1rem;
 }
 
-.login-btn {
+.input-container > input {
+  margin-bottom: 0.25rem;
+}
+
+.submit-btn {
   text-transform: capitalize;
   font-weight: bold;
   display: block;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   border: none;
   background-color: var(--primary-color);
-  width: 100%;
+  width: 300px;
   color: white;
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
   font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
-.register-link{
+.link {
   text-align: center;
   text-decoration: underline;
-  color: rgb(112, 112, 112);
+  color: rgb(73, 73, 73);
+  margin-top: 0.5rem;
+}
+
+.link:hover {
+  cursor: pointer;
 }
 
 .hospitalRegister input{
   width: 300px;
 }
+
+.error {
+  color: rgb(245, 8, 8);
+}
+

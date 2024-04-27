@@ -1,99 +1,129 @@
-import { useEffect, useState } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 import User from "../../types/User";
-import { AssignNurseToPatient, GetPatients } from "../../utils/api/patients";
-import { Link, useOutletContext } from "react-router-dom";
+import { AssignNurseToPatient, GetPatients, UnassignStaffFromPatient } from "../../utils/api/patients";
+import { useOutletContext } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 import { AssignDoctorToPatient, GetDoctors, GetNurses } from "../../utils/api/admin";
 import styles from './patients.module.css';
+import PopupForm from "./PopupForm";
+import PatientCard from "./PatientCard";
+import { Staff } from "../../types/Staff";
 
 export default function PatientsPage() {
 
   const [patients, setPatients] = useState<User[]>([]);
   const [currPatient, setCurrPatient] = useState("");
   
-  const [doctors, setDoctors] = useState<User[]>([]);
-  const [nurses, setNurses] = useState<User[]>([]);
-
-  const [showDoctors, setShowDoctors] = useState(false);
-  const [showNurses, setShowNurses] = useState(false); 
+  const [filter, setFilter] = useState("");
+  const [filteredPatients, setFilteredPatients] = useState<User[]>([]);
+  
+  const [staff, setStaff] = useState<Staff[]>([]);
+  const [showPopup, setShowPopup] = useState(false);
 
   const { user } = useOutletContext() as UserContext;
- 
 
+ 
   const fetchPatients = async () => {
     const data =  await GetPatients();
     setPatients(data);
+    setFilteredPatients(data);
   }
 
   const fetchDoctors = async () => {
     const data = await GetDoctors();
-    setDoctors(data);
-    console.log("Doctors Received:")
-    console.log(data);
+    setStaff(prev => [...prev, ...data]);
   }
 
   const fetchNurses = async () => {
     const data = await GetNurses();
-    setNurses(data);
-    console.log("Nurses Received:")
-    console.log(data);
+    setStaff(prev => [...prev, ...data]);
   }
 
-  const assignDoctor = async (doctorId: string) => {
-    const data = await AssignDoctorToPatient(doctorId, currPatient);
-    console.log(data);
+  const close = () => {
+    setShowPopup(false);
   }
 
-  const assignNurse = async (nurseId: string) => {
-    const data = await AssignNurseToPatient(nurseId, currPatient);
-    console.log(data);
+  const onClickAssign = (patient: User) => {
+    setShowPopup(true);
+    setCurrPatient(patient.id);
+  }
+
+  const updateFilter: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const newFilter = e.target.value;
+    const newPatients = patients.filter((patient) => {
+      const patientName = `${patient.firstName} ${patient.lastName}`.toLowerCase();
+      return patientName.startsWith(newFilter.toLowerCase());
+    })
+    setFilter(newFilter);
+    setFilteredPatients(newPatients);
+  };
+
+  const assignToPatient = async (staffId: string, patientId: string) => {
+
+    if (!user) return; 
+
+    let success = false;
+    if (user?.userRole === 'admin') {
+      await AssignDoctorToPatient(staffId, patientId);
+      success = true;
+    } else if (user?.userRole === "doctor") {
+      await AssignNurseToPatient(staffId, patientId);
+      success = true;
+    }
+
+    if (success) {
+      setStaff(prev => prev.map(staff => {
+        if (staff.id !== staffId) { return staff }
+        return {...staff, patients: [...staff.patients, patientId]}
+      }));
+    }
+    
+  }
+
+  const unassign = async (staffId: string, patientId: string) => {
+    try {
+      await UnassignStaffFromPatient(staffId, patientId);
+      setStaff(prev => prev.map(staff => {
+        if (staff.id !== staffId) { return staff }
+        const patients = staff.patients.filter(patient => patient !== patientId);
+        return { ...staff, patients };
+      }));
+    } catch(e) {
+      console.error(e);
+    }
   }
 
   useEffect(() => {
     fetchPatients();
-    if (user?.userRole === "admin") {
+    if (user?.userRole !== "patient") {
       fetchDoctors();
-    } else if (user?.userRole === "doctor") {
       fetchNurses();
     }
   }, []);
 
-  return <div>
+  return <div className={styles.page}>
+
     <h1>Your Patients:</h1>
-    {patients.map(patient => {
-      return <div key={patient.id} className={styles.patient}>
-        <div className={styles.img}>
-          <img src="/icons/user.png" />
-        </div>
-        <div className={styles.info}>
-          <h2>{patient.firstName} {patient.lastName}</h2>
-          {user?.userRole === "admin" && <button onClick={() => {
-            setCurrPatient(patient.id); setShowDoctors(true);
-          }}>Assign Doctor</button>}
-          <div className={styles.buttons}>
-            {user?.userRole === "doctor" && <button onClick={() => {setCurrPatient(patient.id); setShowNurses(true);}}>Assign Nurse</button>}
-            {user?.userRole !== "admin" && <Link to={`/image-upload/${patient.id}`}><button>Upload Image</button></Link>}
-          </div>
-        </div>
-      </div>
-    })}
 
-    {showDoctors && <div>
-      Select a Doctor:
-      {doctors.map(doctor => {
-      return <div key={doctor.id}>
-        <h2>Dr. {doctor.lastName}</h2>
-        <button onClick={() => assignDoctor(doctor.id)}>Assign</button>
-      </div>})}
-    </div>}
+    <input
+      className={styles['search-bar']}
+      value={filter} 
+      onChange={updateFilter}
+      placeholder={`Search`}
+    />
 
-    {showNurses && <div>
-      Select a Nurse:
-      {nurses.map(nurse => {
-      return <div key={nurse.id}>
-        <h2>Nr. {nurse.lastName}</h2>
-        <button onClick={() => assignNurse(nurse.id)}>Assign</button>
-      </div>})}
-    </div>}
+    <div className={styles['patients-container']}>
+      {filteredPatients.map(patient => {
+        return <PatientCard patient={patient} key={patient.id} onClickAssign={onClickAssign} />
+      })}
+    </div>
+
+    {showPopup && <PopupForm
+      close={close} 
+      staff={staff} 
+      patientId={currPatient} 
+      assign={assignToPatient}
+      unassign={unassign}
+    />}
   </div>
 }

@@ -1,8 +1,10 @@
 import { ChangeEventHandler, useState } from "react";
 import Hospital from "../../../types/Hospital";
-import styles from "../hospital-selection.module.css";
-import { RegisterDataControls, RegisterPages } from "./Register";
+import styles from "./hospital-selection.module.css";
 import { GetHospitalsByZipcode } from "../../../utils/api/hospital";
+import { RegisterDataControls, RegisterPages } from "../types/register";
+import authStyles from '../auth.module.css';
+import Header from "../Header";
 
 enum Status {
   DISPLAY,
@@ -23,7 +25,7 @@ export default function HospitalForm({registerDataControls, goTo}: props) {
   const [status, setStatus] = useState<Status>(Status.DISPLAY);
   const [hospitalSelected, setHospitalSelected] = useState<Hospital | undefined>();
   const [filter, setFilter] = useState({ zipcode: "" });
-
+  const [error, setError] = useState("");
   // const hospitalsReceived = [
   //   {
   //     id: 'TEST_0',
@@ -87,7 +89,11 @@ export default function HospitalForm({registerDataControls, goTo}: props) {
   }
 
   const goNext = () => {
-    goTo(RegisterPages.LOGIN_DETAILS);
+    if (!hospitalSelected) {
+      setError("Please select a hospital first");
+    } else {
+      goTo(RegisterPages.LOGIN_DETAILS);
+    }
   }
 
   if (status === Status.LOADING) {
@@ -95,26 +101,27 @@ export default function HospitalForm({registerDataControls, goTo}: props) {
   }
 
   return <div className={styles.page}>
-    <h1>Find Your Hospital</h1>
+    <Header heading="Find Your Hospital" subheading=""/>
     <div className={styles.search}>
       <p>Enter your hospital's ZIP code:</p>
-      <input name="zipcode" value={filter.zipcode} onChange={onFilterChange}/>
-      <button onClick={search}>Search</button>
+      <div className={styles['search-bar']}>
+        <input name="zipcode" value={filter.zipcode} onChange={onFilterChange}/>
+        <button onClick={search}>Search</button>
+      </div>
       <div className={styles.hospitals}>
         {hospitals && hospitals.map(hospital => {
           const {id, hospitalName: name, address} = hospital;
           const {street, city, state, zipcode} = address;
           return <div key={id} onClick={() => selectHospital(hospital)} className={hospitalSelected?.id === id ? styles.selected : ''}>
-            <h2>{name}</h2>
+            <h3>{name}</h3>
             <p>{street}, {city} {state} {zipcode}</p>
           </div>
         })}
         {hospitals && hospitals.length === 0 && <i>No hospitals matched your search.</i>}
       </div>
+      <button className={authStyles['submit-btn']} onClick={goNext}>Next</button>
     </div>
-    <div className={styles.navigation}>
-      <button onClick={goBack}>Back</button>
-      <button disabled={!hospitalSelected} onClick={goNext}>Next</button>
-    </div>
+    <p className={authStyles['link']} onClick={goBack}>Back</p>
+    <p style={{textAlign: "center", marginTop: "3rem"}} className={authStyles['error']}>{error}</p>
   </div>
 }

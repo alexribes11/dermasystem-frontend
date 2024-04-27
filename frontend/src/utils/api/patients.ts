@@ -22,3 +22,8 @@ export const AssignNurseToPatient = async (nurseId: string, patientId: string) =
   const data = response.data;
   return data;
 }
+
+export const UnassignStaffFromPatient = async (staffId: string, patientId: string) => {
+  const response = await Axios.delete(`${baseEndpoint}/${patientId}/unassign/${staffId}`);
+  return response.data;
+}

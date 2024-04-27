@@ -8,7 +8,6 @@ export default function Navbar() {
 
   const { pathname } = useLocation();
   const [user, setUser] = useState<User | undefined>();
-  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +20,7 @@ export default function Navbar() {
         navigate("/login");
       }
     };
+
     if (!user) {
       fetchData();
     }
@@ -35,6 +35,8 @@ export default function Navbar() {
           <h1>DermaSystem</h1>
         </div>
         <nav className={styles['links']}>
+          {user.userRole === "admin" && <Link to={"/staff"}>Staff</Link>}
+          {user.userRole !== "patient" && user.userRole !== "admin" && <Link to={"/image-upload"}>Upload Image</Link>}
           {user.userRole !== "patient" && <Link to={"/patients"}>Patients</Link>}
           <Link to="/archives" className={(pathname === "/archives" ? styles['underlined'] : "")}>Archives</Link>
           <Link to="/faq" className={(pathname === "/faq" ? styles['underlined'] : "")}>FAQ</Link>

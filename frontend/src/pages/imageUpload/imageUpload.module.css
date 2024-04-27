@@ -111,3 +111,11 @@ body {
   flex-direction: row;
   gap: 30px;
 }
+
+.patient-selector {
+  display: flex;
+}
+
+.patient-selector > * {
+  margin: 0.25rem;
+}
